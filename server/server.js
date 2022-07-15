@@ -2,14 +2,16 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const app = express()
-const api = require('./routes/logIn.js')
+const register = require('./routes/register')
 const cors = require('cors')
 
-app.use(bodyParser.urlencoded({extended : false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
 app.use(cors())
-app.use('/', api)
+app.use('/', register)
+app.use('/main', () => {
+  console.log('main 진입')
+})
 
 app.listen(3001, () => {
   console.log('connected port:3001')

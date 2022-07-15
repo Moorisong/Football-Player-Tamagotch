@@ -5,7 +5,7 @@ import { Const } from '../Const/Const'
 import Draggable from 'react-draggable'
 import Arrows from '../Arrows/Arrows'
 import AddModal from '../Modal/AddModal'
-import LogIn from '../LogIn/LogIn'
+import Register from '../Register/Register'
 
 export default function Board() {
   const nodeRef = useRef(null)
@@ -70,7 +70,7 @@ export default function Board() {
           </ul>
         </div>
       </div>
-      <LogIn />
+      <Register />
     </>
   )
 }

@@ -17,6 +17,7 @@
     "http-proxy-middleware": "^2.0.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.2",
+    "node-fetch": "^3.2.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.4",
