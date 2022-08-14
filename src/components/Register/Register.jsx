@@ -1,9 +1,10 @@
 import styles from './Register.module.css'
 import { useRef, useState } from 'react'
 import Main from '../Main/Main'
+import { Link } from 'react-router-dom'
 
 export default function Register() {
-  const [id_forMain, setId_forMain] = useState(null)
+  const [idAdded, setIdAdded] = useState(null)
   const input_id = useRef(null)
   const input_pw = useRef(null)
   const input_age = useRef(null)
@@ -34,27 +35,26 @@ export default function Register() {
       }),
     }).then(res => {
       if (res.status == 200) {
-        setId_forMain(id)
-        console.log(`[${id_forMain}]님 가입 완료!`)
+        setIdAdded(id)
+        console.log(`[${id}]님 가입 완료!`)
       }
     })
   }
 
   return (
     <>
-      <div>
-        <input type="text" placeholder="ID 입력" ref={input_id} />
-        <input type="text" placeholder="PW 입력" ref={input_pw} />
-        <input type="text" placeholder="나이 입력" ref={input_age} />
-        <input type="text" placeholder="성별 입력" ref={input_sex} />
-        <input type="text" placeholder="닉네임 입력" ref={input_nickName} />
-        <input type="text" placeholder="클럽 입력" ref={input_club} />
+      {!idAdded && <div className={styles.textBoxWrap}>
+        <input type="text" placeholder="ID 입력" ref={input_id} className={styles.textBox} />
+        <input type="text" placeholder="PW 입력" ref={input_pw} className={styles.textBox} />
+        <input type="text" placeholder="나이 입력" ref={input_age} className={styles.textBox} />
+        <input type="text" placeholder="성별 입력" ref={input_sex} className={styles.textBox} />
+        <input type="text" placeholder="닉네임 입력" ref={input_nickName} className={styles.textBox} />
+        <input type="text" placeholder="클럽 입력" ref={input_club} className={styles.textBox} />
 
-        <button className={styles.RegisterBtn} onClick={submitRegister}>
+        <Link to={'/FormationBoard'} className={styles.RegisterBtn}>
           가입하기
-        </button>
-      </div>
-      {id_forMain && <Main id={id_forMain} />}
+        </Link>
+      </div>}
     </>
   )
 }

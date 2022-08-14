@@ -70,7 +70,6 @@ export default function Board() {
           </ul>
         </div>
       </div>
-      <Register />
     </>
   )
 }

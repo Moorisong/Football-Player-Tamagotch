@@ -1,4 +1,5 @@
-import Board from "../components/Board/Board"
+import { Login } from "@mui/icons-material";
+import Board from '../components/Board/Board'
 
 export default function FormationBoard(){
     return(
