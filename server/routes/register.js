@@ -7,7 +7,7 @@ router.post('/register', (req, res) => {
     let user = new User(req.body)
     user.save().then(() => {
       console.log(`[${user.id}] 님의 정보가 추가되었습니다.`)
-      res.json({ res: 'success' })
+      res.json({ resultMsg: 'success' })
     })
   } catch (e) {
     console.log('error---> ', e)
