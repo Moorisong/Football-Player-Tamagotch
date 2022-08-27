@@ -9,9 +9,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
 app.use('/', register)
-app.use('/main', () => {
-  console.log('main 진입')
-})
 
 app.listen(3001, () => {
   console.log('connected port:3001')

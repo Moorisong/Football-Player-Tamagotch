@@ -10,7 +10,7 @@ router.post('/register', (req, res) => {
       res.json({ resultMsg: 'success' })
     })
   } catch (e) {
-    console.log('error---> ', e)
+    console.log('err---> ', e)
   }
 })
 
