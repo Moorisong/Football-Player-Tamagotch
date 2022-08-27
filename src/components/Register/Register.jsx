@@ -68,6 +68,7 @@ export default function Register() {
         if (result.resultMsg == 'success') {
           setIdAdded(true)
           navigate('/FormationBoard')
+          alert('회원 가입 및 로그인 완료! 메인 화면으로 이동합니다.');
         }else if(result.resultMsg == 'duplicated ID'){
           alert("이미 존재하는 ID입니다.");
           return false

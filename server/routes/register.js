@@ -11,7 +11,6 @@ router.post('/register', (req, res) => {
           console.log('이미 존재하는 ID입니다.');
           res.json({resultMsg: 'duplicated ID'})
         }
-
       });
     })
     user.save().then(() => {
