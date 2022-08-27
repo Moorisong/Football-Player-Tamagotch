@@ -22,7 +22,7 @@ export default function Register() {
     const nickName = input_nickName.current.value
     const club = input_club.current.value
 
-    let checkAge = /^[0-9]+$/
+    let check = /^[0-9]+$/
 
     if (!id || !pw || !age || !sex || !nickName || !club) {
       alert('모든 항목을 입력해주세요.')
@@ -35,10 +35,10 @@ export default function Register() {
     } else if (pw.length < 3) {
       alert('패스워드는 3글자 이상으로 설정해주세요.')
       return false
-    } else if (!checkAge.test(age)) {
+    } else if (!check.test(age)) {
       alert('나이는 숫자로 입력해주세요.')
       return false
-    } else if (typeof sex !== 'string') {
+    } else if (check.test(sex)) {
       alert('성별은 문자로 입력해주세요.')
       return false
     }
