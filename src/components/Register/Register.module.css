@@ -1,0 +1,15 @@
+.RegisterBtn {
+  background-color: skyblue;
+  border: 2px solid lightgray;
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1.3rem;
+}
+.textBox{
+  padding: 0.5rem 14rem 0.5rem 0.5rem;
+  display: block;
+}
+.textBoxWrap{
+  margin-top: 3rem;
+}
