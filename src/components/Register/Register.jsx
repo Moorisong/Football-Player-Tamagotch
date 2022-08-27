@@ -68,7 +68,11 @@ export default function Register() {
         if (result.resultMsg == 'success') {
           setIdAdded(true)
           navigate('/FormationBoard')
+        }else if(result.resultMsg == 'duplicated ID'){
+          alert("이미 존재하는 ID입니다.");
+          return false
         } else {
+          alert('에러가 발생하였습니다');
           console.log('에러---->', result.errorMsg)
         }
       })
