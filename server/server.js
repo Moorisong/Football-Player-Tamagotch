@@ -3,12 +3,16 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const app = express()
 const register = require('./routes/register')
+const logIn = require('./routes/logIn')
+
 const cors = require('cors')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
 app.use('/', register)
+app.use('/', logIn)
+
 
 app.listen(3001, () => {
   console.log('connected port:3001')

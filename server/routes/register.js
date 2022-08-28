@@ -1,25 +1,28 @@
 const express = require('express')
 const router = express.Router()
 const { User } = require('../../src/models/User')
+const bcrypt = require('bcrypt')
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   try {
-    let user = new User(req.body)
-    User.find((err,users)=>{
-      users.forEach(ele => {
-        if(ele.id == req.body.id){
-          console.log('이미 존재하는 ID입니다.');
-          res.json({resultMsg: 'duplicated ID'})
-        }
+    const userFind = await User.findOne({ id: req.body.id }).exec()
+    if (userFind) {
+      return res.json({ resultMsg: 'duplicated ID' })
+    }
 
-      });
-    })
-    user.save().then(() => {
-      console.log(`[${user.id}] 님의 정보가 추가되었습니다.`)
-      res.json({ resultMsg: 'success' })
-    })
+    let user = new User(req.body)
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(req.body.pw, salt)
+
+    user.pw = hash
+
+    await user.save()
+    console.log(`[${user.id}] 님의 정보가 추가되었습니다.`)
+    res.json({ resultMsg: 'success' })
+
   } catch (e) {
     console.log('err---> ', e)
+    res.status(500).json({satus: 500, resultMsg: 'internal error'})
   }
 })
 
