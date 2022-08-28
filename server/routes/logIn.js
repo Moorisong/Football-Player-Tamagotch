@@ -14,7 +14,8 @@ router.post('/logIn', async (req, res) => {
       return res.json({ resultMsg: 'notFoundPw' })
     }
 
-    return res.json({ resultMsg: 'logIn_success' })
+    res.json({ resultMsg: 'logIn_success' })
+    
   } catch (e) {
     console.log('err---> ', e)
   }

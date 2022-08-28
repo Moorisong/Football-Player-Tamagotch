@@ -16,12 +16,13 @@ router.post('/register', async (req, res) => {
 
     user.pw = hash
 
-    await user.save().then(() => {
-      console.log(`[${user.id}] 님의 정보가 추가되었습니다.`)
-      res.json({ resultMsg: 'success' })
-    })
+    await user.save()
+    console.log(`[${user.id}] 님의 정보가 추가되었습니다.`)
+    res.json({ resultMsg: 'success' })
+
   } catch (e) {
     console.log('err---> ', e)
+    res.status(500).json({satus: 500, resultMsg: 'internal error'})
   }
 })
 
