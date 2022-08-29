@@ -4,14 +4,23 @@ const mongoose = require('mongoose')
 const app = express()
 const register = require('./routes/register')
 const logIn = require('./routes/logIn')
-
+const auth = require('./routes/auth')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
+
+app.use(cookieParser())
+
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  credentials: true,
+};
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use('/', register)
 app.use('/', logIn)
+app.use('/', auth)
 
 
 app.listen(3001, () => {
