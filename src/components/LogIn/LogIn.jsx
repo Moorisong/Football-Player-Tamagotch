@@ -21,6 +21,8 @@ function clickLogInBtn(){
     const id = input_id.current.value
     const pw = input_pw.current.value
 
+    if(!id || !pw) return alert('아이디와 비밀번호를 입력해주세요.')
+
     axios
     .post('http://localhost:3001/logIn', { "id": id, "pw": pw })
     .then(res => {
@@ -31,11 +33,11 @@ function clickLogInBtn(){
 
         axios
         .post('http://localhost:3001/auth', {token: token})
-        .then(res => console.log('res-->', res))
+        .then(res => {
+          alert(`${res.data.nickName}님 환영합니다.`);
+          navigate('/FormationBoard');
+          })
         }
-
-        alert('로그인 완료! 메인 화면으로 이동합니다.');
-        navigate('/FormationBoard');
       }
   )
     .catch((err)=>{
