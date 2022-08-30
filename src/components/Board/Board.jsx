@@ -1,16 +1,19 @@
 import styles from './Board.module.css'
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Circles from '../Circles/Circles'
 import { Const } from '../Const/Const'
 import Draggable from 'react-draggable'
 import Arrows from '../Arrows/Arrows'
 import AddModal from '../Modal/AddModal'
 import Register from '../Register/Register'
+import axios from 'axios';
 
 export default function Board() {
   const nodeRef = useRef(null)
   const [readyToModal, setReadyToModal] = useState(false)
   const [addModal, setAddModal] = useState(false)
+  const navigate = useNavigate()
 
   const onStart = e => {
     e.target.style.opacity = '0.5'
@@ -28,9 +31,21 @@ export default function Board() {
       setAddModal(true)
     }
   }
+  const onClickLogOut = e => {
+    axios
+      .post('http://localhost:3001/logOut')
+      .then(res => {
+        if(res.data.resultMsg == 'logOut_success'){
+          alert('로그아웃 되었습니다.')
+          navigate('/logIn')
+        }
+      })
+      }
+
 
   return (
     <>
+    <button onClick={onClickLogOut}>로그아웃</button>
       <div className={styles.wrapper}>
         <div className={styles.dragZone}>
           <ul className={styles.district_01}>
