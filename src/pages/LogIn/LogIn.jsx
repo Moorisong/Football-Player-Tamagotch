@@ -1,14 +1,17 @@
 import { useRef, useState } from "react";
-import Register from "../Register/Register";
-import { useNavigate } from 'react-router-dom'
+import Register from "../../components/Register/Register";
 import styles from './LogIn.module.css'
 import axios from 'axios';
 import { useCookies } from "react-cookie";
+import { Const } from '../../components/Const/Const'
+import Board from "../../components/Board/Board";
+
 
 export default  function LogIn() {
   const [registerClicked, setRegisterClicked] = useState(false);
+  const [logInState, setLogInState] = useState(false)
   const [cookies, setCookie] = useCookies(['id']);
-  const navigate = useNavigate()
+  const nodeRef = useRef(null)
 
   const input_id = useRef(null)
   const input_pw = useRef(null)
@@ -35,7 +38,7 @@ function clickLogInBtn(){
         .post('http://localhost:3001/auth', {token: token})
         .then(res => {
           alert(`${res.data.nickName}님 환영합니다.`);
-          navigate('/FormationBoard');
+          return setLogInState(true)
           })
         }
       }
@@ -50,16 +53,30 @@ function clickLogInBtn(){
        }
       }
     )
-
 }
+const onClickLogOut = e => {
+  axios
+    .post('http://localhost:3001/logOut')
+    .then(res => {
+      if(res.data.resultMsg == 'logOut_success'){
+        alert('로그아웃 되었습니다.')
+        return setLogInState(false)
+      }
+    })
+    }
 
   return (
     <>
+    {!logInState && <div>
       <input type='text' placeholder='ID' ref={input_id}></input>
       <input type='text' placeholder='Password' ref={input_pw}></input>
       <button className={styles.register_btn}onClick={clickLogInBtn}>로그인</button>
       <button className={styles.register_btn}onClick={clickRegisterBtn}>회원가입</button>
       {registerClicked && <Register/>}
+      </div>}
+
+    {logInState && <button onClick={onClickLogOut}>로그아웃</button>}
+    {logInState && <Board />}
     </>
   )
 }

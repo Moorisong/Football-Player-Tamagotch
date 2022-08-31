@@ -6,6 +6,7 @@ const register = require('./routes/register')
 const logIn = require('./routes/logIn')
 const auth = require('./routes/auth')
 const logOut = require('./routes/logOut')
+const logInState = require('./routes/logInState')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
@@ -23,6 +24,8 @@ app.use('/', register)
 app.use('/', logIn)
 app.use('/', auth)
 app.use('/', logOut)
+app.use('/', logInState)
+
 
 
 app.listen(3001, () => {
