@@ -1,20 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Register from "../../components/Register/Register";
 import styles from './LogIn.module.css'
 import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { Const } from '../../components/Const/Const'
 import Board from "../../components/Board/Board";
+import { CookieSharp } from "@mui/icons-material";
 
 
 export default  function LogIn() {
   const [registerClicked, setRegisterClicked] = useState(false);
-  const [logInState, setLogInState] = useState(false)
-  const [cookies, setCookie] = useCookies(['id']);
+  const [logInState, setLogInState] = useState(()=>JSON.parse(window.localStorage.getItem("logInState")))
+  const [cookies, setCookie, removeCookie] = useCookies(['_id']);
   const nodeRef = useRef(null)
 
   const input_id = useRef(null)
   const input_pw = useRef(null)
+
+  useEffect(()=>{
+    window.localStorage.setItem("logInState", JSON.stringify(logInState))
+  },[logInState])
+
 
   function clickRegisterBtn(){
     setRegisterClicked(true);
@@ -31,14 +37,18 @@ function clickLogInBtn(){
     .then(res => {
       if(res.data.resultMsg == 'logIn_success'){
         setCookie('_id', res.data.token)
-
         const token = res.data.token
 
         axios
         .post('http://localhost:3001/auth', {token: token})
         .then(res => {
-          alert(`${res.data.nickName}님 환영합니다.`);
-          return setLogInState(true)
+
+          if(res.data.result == 'success' ) {
+            alert(`${res.data.nickName}님 환영합니다.`);
+            return setLogInState(true)
+          }
+          else alert('로그인에 실패하였습니다.')
+          return
           })
         }
       }
@@ -59,7 +69,8 @@ const onClickLogOut = e => {
     .post('http://localhost:3001/logOut')
     .then(res => {
       if(res.data.resultMsg == 'logOut_success'){
-        alert('로그아웃 되었습니다.')
+         alert('로그아웃 되었습니다.')
+         removeCookie('_id')
         return setLogInState(false)
       }
     })
@@ -67,7 +78,7 @@ const onClickLogOut = e => {
 
   return (
     <>
-    {!logInState && <div>
+    {!logInState&& <div>
       <input type='text' placeholder='ID' ref={input_id}></input>
       <input type='text' placeholder='Password' ref={input_pw}></input>
       <button className={styles.register_btn}onClick={clickLogInBtn}>로그인</button>

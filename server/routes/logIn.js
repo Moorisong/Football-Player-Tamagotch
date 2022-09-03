@@ -21,7 +21,7 @@ router.post('/logIn', (req, res) => {
           return res.status(500).json({msg: 'Somgthing is wrong'})
         }
         if(isMatch){
-          const token = jwt.sign({userId: user.id},'secret-by-ksh', {expiresIn: "7d"})
+          const token = jwt.sign({userId: user.id},'secret-by-ksh', {expiresIn: "1d"})
           user.token = token;
           user.save((err,user)=>{
             if(err){
