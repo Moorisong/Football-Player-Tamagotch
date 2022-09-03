@@ -6,9 +6,8 @@ const bcrypt = require('bcrypt')
 router.post('/register', async (req, res) => {
   try {
     const userFind = await User.findOne({ id: req.body.id }).exec()
-    if (userFind) {
-      return res.json({ resultMsg: 'duplicated ID' })
-    }
+    if (userFind) return res.status(403).json({ resultMsg: 'duplicated ID' })
+
 
     let user = new User(req.body)
     const salt = bcrypt.genSaltSync(10)

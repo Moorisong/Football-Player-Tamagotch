@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Register from "../../components/Register/Register";
-import styles from './LogIn.module.css'
+import styles from './Main.module.css'
 import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { Const } from '../../components/Const/Const'
@@ -37,7 +37,10 @@ function clickLogInBtn(){
     .then(res => {
       if(res.data.resultMsg == 'logIn_success'){
         setCookie('_id', res.data.token)
+
         const token = res.data.token
+
+        if(!token) alert('예기치 못한 에러가 발생했습니다.')
 
         axios
         .post('http://localhost:3001/auth', {token: token})
@@ -76,6 +79,19 @@ const onClickLogOut = e => {
     })
     }
 
+const onClickMakeNewPlayer = e => {
+  axios
+    .post('http://localhost:3001/makeNewPlayer')
+    .then(res => {
+      return console.log('res--->',res)
+      // if(res.data.resultMsg == 'logOut_success'){
+      //    alert('로그아웃 되었습니다.')
+      //    removeCookie('_id')
+        // return setLogInState(false)
+      // }
+    })
+}
+
   return (
     <>
     {!logInState&& <div>
@@ -87,6 +103,8 @@ const onClickLogOut = e => {
       </div>}
 
     {logInState && <button onClick={onClickLogOut}>로그아웃</button>}
+    {logInState && <button onClick={onClickMakeNewPlayer}>선수 생성</button>}
+
     {logInState && <Board />}
     </>
   )
