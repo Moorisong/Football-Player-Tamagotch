@@ -1,11 +1,8 @@
 import styles from './Register.module.css'
 import { useRef, useState } from 'react'
-import Main from '../Main/Main'
-import { useNavigate } from 'react-router-dom'
 
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
-  const navigate = useNavigate()
 
   const input_id = useRef(null)
   const input_pw = useRef(null)
