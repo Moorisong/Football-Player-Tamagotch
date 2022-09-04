@@ -1,5 +1,5 @@
 const Util = {
-  randomOfArray: (array, max) => {
+  randomOfArray: (array) => {
     //배열에서 하나의 요소를 랜덤으로 리턴
     const maxRandomVal = Math.floor(Math.random() * array.length)
     return array[maxRandomVal];
@@ -15,6 +15,7 @@ const Util = {
         const bothRandomVal = (Math.random()*(max-min))+min
         return Math.floor(bothRandomVal)
       }
-  }
-  }
+  },
+}
+
 module.exports = { Util }
