@@ -11,6 +11,8 @@ const auth = require('./routes/auth')
 const logOut = require('./routes/logOut')
 const makeNewPlayer = require('./routes/makeNewPlayer')
 const training = require('./routes/training')
+const competition = require('./routes/competition')
+
 
 const corsOptions = {
   origin: ["http://localhost:3000"],
@@ -28,6 +30,7 @@ app.use('/', auth)
 app.use('/', logOut)
 app.use('/', makeNewPlayer)
 app.use('/', training)
+app.use('/', competition)
 
 app.listen(3001, () => {
   console.log('connected port:3001')

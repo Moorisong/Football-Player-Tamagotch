@@ -2,7 +2,6 @@ const express = require('express')
 const { Player } = require('../../src/models/Player')
 const router = express.Router()
 const { Training } = require('../../src/models/Training')
-const { User } = require('../../src/models/User')
 const { Util } = require('../../src/components/Util/commonUtil')
 
 
@@ -10,7 +9,12 @@ router.post('/training', async (req, res) => {
   try{
     const findPlayer = await Player.findOne({pName: req.body.pName}).exec()
 
+    if(!findPlayer) res.status(200).json({resultMsg: "no_Player"})
+
     if(findPlayer){
+
+      if(findPlayer.training.onTrain == true ) res.json({resultMsg: "already_on_Train", trainType: findPlayer.training.trainType, starTime: findPlayer.training.startTime})
+
       if(findPlayer.training.onTrain == false) {
         findPlayer.training.onTrain = true
         findPlayer.training.trainType = req.body.trainType
@@ -68,8 +72,8 @@ router.post('/training', async (req, res) => {
             }
           }
         }
-      } else res.json({resultMsg: "already_on_Train", trainType: findPlayer.training.trainType, starTime: findPlayer.training.startTime})
-    } else res.status(200).json({resultMsg: "no_Player"})
+      }
+    }
 
   }catch(err){
     console.log('err----> ', err)
