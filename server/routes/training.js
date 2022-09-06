@@ -23,7 +23,7 @@ router.post('/training', async (req, res) => {
         //전체 훈련일 때
           if(findPlayer.training.trainType == 'entire'){
             const pickNumber = Util.makeRandomNumber(100,1)
-            if(pickNumber<=90){
+            if(pickNumber<=20){
               const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
               const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
               const plusValue = Util.randomOfArray([1,2])
