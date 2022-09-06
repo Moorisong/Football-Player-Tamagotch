@@ -16,6 +16,16 @@ const Util = {
         return Math.floor(bothRandomVal)
       }
   },
+
+  afterTraining: (playerModel) => {
+    playerModel.training.onTrain = false
+    playerModel.training.trainType = null
+    playerModel.training.startTime = null
+
+    playerModel.save()
+  },
+
+
 }
 
 module.exports = { Util }

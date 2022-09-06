@@ -23,30 +23,21 @@ router.post('/training', async (req, res) => {
         //전체 훈련일 때
           if(findPlayer.training.trainType == 'entire'){
             const pickNumber = Util.makeRandomNumber(100,1)
-            if(pickNumber<=10){
+            if(pickNumber<=90){
               const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
               const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
               const plusValue = Util.randomOfArray([1,2])
 
               findPlayer.stat[randomPosition][randomStat] += plusValue
-              // await findPlayer.save()
 
               setTimeout(()=>{
-                findPlayer.training.onTrain = false
-                findPlayer.training.trainType = null
-                findPlayer.training.startTime = null
-
-                findPlayer.save()
+                const trainInfo = Util.afterTraining(findPlayer)
                 console.log('전체 훈련 끝-----!!')
                return res.status(200).json({resultMsg: "entire_training_finished", plusValue: plusValue, plusStat: randomStat})
               }, 2000)
             } else{
               setTimeout(()=>{
-                findPlayer.training.onTrain = false
-                findPlayer.training.trainType = null
-                findPlayer.training.startTime = null
-
-                findPlayer.save()
+                Util.afterTraining(findPlayer)
                 console.log('전체 훈련 끝-----!!')
                 return res.status(200).json({resultMsg: "entire_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
@@ -62,23 +53,16 @@ router.post('/training', async (req, res) => {
               const plusValue = 1
 
               findPlayer.stat[randomPosition][randomStat] += plusValue
-              // await findPlayer.save()
 
               setTimeout(()=>{
-                findPlayer.training.onTrain = false
-                findPlayer.training.trainType = null
-                findPlayer.training.startTime = null
-
-                findPlayer.save()
+                Util.afterTraining(findPlayer)
+                console.log('부분 훈련 끝-----!!')
                return res.status(200).json({resultMsg: "part_training_finished", plusValue: plusValue, plusStat: randomStat})
               }, 2000)
             } else{
               setTimeout(()=>{
-                findPlayer.training.onTrain = false
-                findPlayer.training.trainType = null
-                findPlayer.training.startTime = null
-
-                findPlayer.save()
+                Util.afterTraining(findPlayer)
+                console.log('부분 훈련 끝-----!!')
                 return res.status(200).json({resultMsg: "part_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
             }
