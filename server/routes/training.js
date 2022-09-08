@@ -36,13 +36,11 @@ router.post('/training', async (req, res) => {
 
               setTimeout(()=>{
                 const trainInfo = Util.afterTraining(findPlayer)
-                console.log('전체 훈련 끝-----!!')
                return res.status(200).json({resultMsg: "entire_training_finished", plusValue: plusValue, plusStat: randomStat})
               }, 2000)
             } else{
               setTimeout(()=>{
                 Util.afterTraining(findPlayer)
-                console.log('전체 훈련 끝-----!!')
                 return res.status(200).json({resultMsg: "entire_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
             }
@@ -60,13 +58,11 @@ router.post('/training', async (req, res) => {
 
               setTimeout(()=>{
                 Util.afterTraining(findPlayer)
-                console.log('부분 훈련 끝-----!!')
                return res.status(200).json({resultMsg: "part_training_finished", plusValue: plusValue, plusStat: randomStat})
               }, 2000)
             } else{
               setTimeout(()=>{
                 Util.afterTraining(findPlayer)
-                console.log('부분 훈련 끝-----!!')
                 return res.status(200).json({resultMsg: "part_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
             }
@@ -77,6 +73,7 @@ router.post('/training', async (req, res) => {
 
   }catch(err){
     console.log('err----> ', err)
+    res.status(500).json({resultMsg: 'internal error'})
   }
 })
 

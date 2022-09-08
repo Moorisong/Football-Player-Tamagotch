@@ -4,9 +4,13 @@ const router = express.Router()
 const { Player } = require('../../src/models/Player')
 const { FriendshipInfo } = require('../../src/models/FriendshipInfo')
 const { LatestRecord } = require('../../src/models/LatestRecord')
+const { User } = require('../../src/models/User')
 
 router.post('/makeNewPlayer', async (req, res)=>{
   try{
+    let userInfo = await User.findOne({id: req.body.userId}).exec()
+    if(userInfo.hasPlayer) return res.status(403).json({resultMsg: 'already has player'})
+
     const playerNameFind = await Player.findOne({pName: req.body.pName}).exec()
     if(playerNameFind) return res.status(403).json({resultMsg: 'duplicated player name'})
 
@@ -41,23 +45,24 @@ router.post('/makeNewPlayer', async (req, res)=>{
     player.stat.goalKeep.throwBall = player.position == '골키퍼' ? Util.makeRandomNumber(100, 50) : Util.makeRandomNumber(50, 1)
     player.stat.goalKeep.communication = player.position == '골키퍼' ? Util.makeRandomNumber(100, 60) : Util.makeRandomNumber(65, 1)
 
-
-    console.log('Player Info--->', player)
-
     player.save();
 
-    let friendship = new FriendshipInfo(req.body)
+    let friendship = await new FriendshipInfo(req.body)
     friendship.name = req.body.pName
     friendship.save()
 
-    let latestRecord = new LatestRecord(req.body)
+    let latestRecord = await new LatestRecord(req.body)
     latestRecord.pName = req.body.pName
     latestRecord.save()
+
+    userInfo.hasPlayer = true
+    await userInfo.save()
 
     res.status(200).json({resultMsg: 'succees'})
 
   }catch(err){
     if(err) console.log('err--->', err)
+    return res.status(500).json({resultMsg: 'internal error'})
   }
 })
 

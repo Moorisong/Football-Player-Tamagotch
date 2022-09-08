@@ -3,6 +3,7 @@ const { Player } = require('../../src/models/Player')
 const router = express.Router()
 const { Util } = require('../../src/components/Util/commonUtil')
 const { LatestRecord } = require('../../src/models/LatestRecord')
+const { Legend } = require('../../src/models/Legend')
 
 
 router.post('/competition', async (req, res)=>{
@@ -29,7 +30,12 @@ router.post('/competition', async (req, res)=>{
       commonRecord.record.push(false)
       commonRecord.save()
 
-      res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo})
+
+      let legendInfo = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
+      legendInfo.accWin += 1
+      legendInfo.save()
+
+      res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, accWin: legendInfo.accWin})
     }
     if(result.legend < result.common) {
 
@@ -46,6 +52,7 @@ router.post('/competition', async (req, res)=>{
 
   }catch(err){
     if(err) console.log('err---->', err)
+    return res.status(500).json({resultMsg: 'internal error'})
   }
 })
 

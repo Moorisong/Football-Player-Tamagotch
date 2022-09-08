@@ -1,3 +1,5 @@
+const { FriendshipInfo } = require("../../models/FriendshipInfo");
+
 const Util = {
   randomOfArray: (array) => {
     //배열에서 하나의 요소를 랜덤으로 리턴
@@ -40,6 +42,7 @@ const Util = {
     const legend_defender = Util.sumStatWithType(legendPlayer, 'defender')
     const common_defender = Util.sumStatWithType(commonPlayer, 'defender')
 
+
     if(legend_defender>common_defender){
       legendP_num+=10
       fightInfo.push({result: "legendWin"})
@@ -77,12 +80,10 @@ const Util = {
     if(legend_attack>common_attack){
       legendP_num+=10
       fightInfo.push({result: "legendWin"})
-    }
-    else if(legend_attack<common_attack){
+    }else if(legend_attack<common_attack){
       commonP_num+=10
       fightInfo.push({result: "commondWin"})
-    }
-    else{
+    }else{
       const luckyNum = Util.makeRandomNumber(100,1)
       if(luckyNum>=50){
         legendP_num+=luckyNum
@@ -95,10 +96,6 @@ const Util = {
     }
     return {legend: legendP_num, common: commonP_num, fightInfo: fightInfo}
   },
-
-  giveKiss: (recordArr) => {
-    
-  }
 
 }
 
