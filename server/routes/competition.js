@@ -14,14 +14,12 @@ router.post('/competition', async (req, res)=>{
     const result = Util.compareAndFight(legendPlayer, commonPlayer)
 
     if(!result) throw(err)
-    if(result.legend > result.common) res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common})
-    else if(result.legend < result.common) res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common})
-
+    if(result.legend > result.common) res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo})
+    else if(result.legend < result.common) res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo})
 
   }catch(err){
     if(err) console.log('err---->', err)
   }
-
 })
 
 module.exports = router

@@ -35,58 +35,73 @@ const Util = {
 
     let legendP_num = Util.makeRandomNumber(50,1)
     let commonP_num = Util.makeRandomNumber(50,1)
+    let fightInfo = []
+
     console.log('최조 포인트------legendP_num---->', legendP_num)
     console.log('최초 포인트------commonP_num---->', commonP_num)
 
 
     const legend_defender = Util.sumStatWithType(legendPlayer, 'defender')
     const common_defender = Util.sumStatWithType(commonPlayer, 'defender')
-    console.log('1차 경합 수비--->', legend_defender)
-    console.log('1차 경합 수비--->', common_defender)
 
-    if(legend_defender>common_defender) legendP_num+=10
-    else if(legend_defender<common_defender) commonP_num+=10
+    if(legend_defender>common_defender){
+      legendP_num+=10
+      fightInfo.push({result: "legendWin"})
+    }
+    else if(legend_defender<common_defender){
+      commonP_num+=10
+      fightInfo.push({result: "commonWin"})
+    }
     else{
       legendP_num+=10
       commonP_num+=10
+      fightInfo.push({result: "sameScore"})
     }
-
-    console.log('1차 후 가공된 포인트------legendP_num---->', legendP_num)
-    console.log('1차 후 가공된 포인트------commonP_num---->', commonP_num)
 
     const legend_middle = Util.sumStatWithType(legendPlayer, 'middle')
     const common_middle = Util.sumStatWithType(commonPlayer, 'middle')
-    console.log('2차 경합 미들--->', legend_defender)
-    console.log('2차 경합 미들--->', common_defender)
 
-    if(legend_middle>common_middle) legendP_num+=10
-    else if(legend_middle<common_middle) commonP_num+=10
+    if(legend_middle>common_middle){
+      legendP_num+=10
+      fightInfo.push({result: "legendWin"})
+    }
+    else if(legend_middle<common_middle){
+      commonP_num+=10
+      fightInfo.push({result: "commondWin"})
+    }
     else{
       legendP_num+=10
       commonP_num+=10
+      fightInfo.push({result: "sameScore"})
     }
-    console.log('2차 후 가공된 포인트------legendP_num---->', legendP_num)
-    console.log('2차 후 가공된 포인트------commonP_num---->', commonP_num)
 
     const legend_attack = Util.sumStatWithType(legendPlayer, 'attack')
     const common_attack = Util.sumStatWithType(commonPlayer, 'attack')
-    console.log('3차 경합 공격--->', legend_defender)
-    console.log('3차 경합 공격--->', common_defender)
 
-    if(legend_attack>common_attack) legendP_num+=10
-    else if(legend_attack<common_attack) commonP_num+=10
-    else{
+    if(legend_attack>common_attack){
       legendP_num+=10
-      commonP_num+=10
+      fightInfo.push({result: "legendWin"})
     }
-
-    console.log('3차 후 가공된 포인트------legendP_num---->', legendP_num)
-    console.log('3차 후 가공된 포인트------commonP_num---->', commonP_num)
-
-    return {legend: legendP_num, common: commonP_num}
-
-
-
+    else if(legend_attack<common_attack){
+      commonP_num+=10
+      fightInfo.push({result: "commondWin"})
+    }
+    else{
+      const luckyNum = Util.makeRandomNumber(100,1)
+      if(luckyNum>=50){
+        legendP_num+=luckyNum
+        fightInfo.push({result: "sameScore-legendWin-lucky"})
+      }
+      else{
+        commonP_num+=luckyNum
+        fightInfo.push({result: "sameScore-commonWin-lucky"})
+      }
+    }
+    fightInfo.forEach((ele, idx)=>{
+      console.log(`[${idx+1}]차천--->`, ele.result)
+    })
+    console.log('결과----> ', legendP_num, commonP_num)
+    return {legend: legendP_num, common: commonP_num, fightInfo: fightInfo}
   }
 
 }
