@@ -38,7 +38,7 @@ const playerSchema = mongoose.Schema({
       },
       foot: {
         type: String
-      }
+      },
     },
     defender: {
       defense:{

@@ -2,6 +2,8 @@ const  { Util } = require('../../src/components/Util/commonUtil')
 const express = require('express')
 const router = express.Router()
 const { Player } = require('../../src/models/Player')
+const { FriendshipInfo } = require('../../src/models/FriendshipInfo')
+const { LatestRecord } = require('../../src/models/LatestRecord')
 
 router.post('/makeNewPlayer', async (req, res)=>{
   try{
@@ -39,9 +41,19 @@ router.post('/makeNewPlayer', async (req, res)=>{
     player.stat.goalKeep.throwBall = player.position == '골키퍼' ? Util.makeRandomNumber(100, 50) : Util.makeRandomNumber(50, 1)
     player.stat.goalKeep.communication = player.position == '골키퍼' ? Util.makeRandomNumber(100, 60) : Util.makeRandomNumber(65, 1)
 
+
     console.log('Player Info--->', player)
 
     player.save();
+
+    let friendship = new FriendshipInfo(req.body)
+    friendship.name = req.body.pName
+    friendship.save()
+
+    let latestRecord = new LatestRecord(req.body)
+    latestRecord.pName = req.body.pName
+    latestRecord.save()
+
     res.status(200).json({resultMsg: 'succees'})
 
   }catch(err){

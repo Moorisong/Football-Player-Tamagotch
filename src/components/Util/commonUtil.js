@@ -37,10 +37,6 @@ const Util = {
     let commonP_num = Util.makeRandomNumber(50,1)
     let fightInfo = []
 
-    console.log('최조 포인트------legendP_num---->', legendP_num)
-    console.log('최초 포인트------commonP_num---->', commonP_num)
-
-
     const legend_defender = Util.sumStatWithType(legendPlayer, 'defender')
     const common_defender = Util.sumStatWithType(commonPlayer, 'defender')
 
@@ -97,11 +93,11 @@ const Util = {
         fightInfo.push({result: "sameScore-commonWin-lucky"})
       }
     }
-    fightInfo.forEach((ele, idx)=>{
-      console.log(`[${idx+1}]차천--->`, ele.result)
-    })
-    console.log('결과----> ', legendP_num, commonP_num)
     return {legend: legendP_num, common: commonP_num, fightInfo: fightInfo}
+  },
+
+  giveKiss: (recordArr) => {
+    
   }
 
 }
