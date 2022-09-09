@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
 const trainingSchema = mongoose.Schema({
-  name: {
+  pName: {
     type: String,
     maxlength: 12,
     required: true,
     lowerCase: true,
     unique: true
   },
-  date: {
+  last_training_date: {
     type: Date,
-    default: Date.now
+    default: null
   },
   entireTrainCnt: {
     type: Number,
@@ -20,35 +20,27 @@ const trainingSchema = mongoose.Schema({
     default: 0,
   },
   plus:{
-    stat_01: {
-      type: String,
+    value: {
+      type: Array,
+      maxlength: 7,
+      default: []
     },
-    value_01: {
-      type: Number,
-      default: 0,
-    },
-    stat_02: {
-      type: String,
-    },
-    value_02: {
-      type: Number,
-      default: 0,
+    stat: {
+      type: Array,
+      maxlength: 7,
+      default: []
     }
   },
   minus:{
-    stat_01: {
-      type: String,
+    value: {
+      type: Array,
+      maxlength: 7,
+      default: []
     },
-    value_01: {
-      type: Number,
-      default: 0,
-    },
-    stat_02: {
-      type: String,
-    },
-    value_02: {
-      type: Number,
-      default: 0,
+    stat: {
+      type: Array,
+      maxlength: 7,
+      default: []
     }
   },
   injury: {

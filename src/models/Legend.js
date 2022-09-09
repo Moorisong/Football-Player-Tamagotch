@@ -5,6 +5,7 @@ const legend = mongoose.Schema({
     maxlength: 12,
     required: true,
     lowerCase: true,
+    unique: false,
   },
   accWin: {
     type: Number,

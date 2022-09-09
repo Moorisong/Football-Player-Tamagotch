@@ -30,7 +30,6 @@ router.post('/competition', async (req, res)=>{
       commonRecord.record.push(false)
       commonRecord.save()
 
-
       let legendInfo = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
       legendInfo.accWin += 1
       legendInfo.save()
@@ -47,7 +46,16 @@ router.post('/competition', async (req, res)=>{
       commonRecord.record.push(true)
       commonRecord.save()
 
-      res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo})
+      const prevLegend = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
+      prevLegend.time_lastLost = new Date()
+      prevLegend.save()
+
+      let currLegend = await new Legend({pName: req.body.commonPlayerName})
+      currLegend.turnNum = prevLegend.turnNum + 1
+      currLegend.accWin += 1
+      currLegend.save()
+
+      res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, turnNum: currLegend.turnNum})
     }
 
   }catch(err){

@@ -7,8 +7,22 @@ const { Util } = require('../../src/components/Util/commonUtil')
 
 router.post('/training', async (req, res) => {
   try{
-    const findPlayer = await Player.findOne({pName: req.body.pName}).exec()
+    let findPlayer = await Player.findOne({pName: req.body.pName}).exec()
+    let trainingInfo = await Training.findOne({pName: req.body.pName}).exec()
 
+    let resultInfo = {
+      plusValue: null,
+      plusStat: null,
+      minusValue: null,
+      minusStat: null, 
+    }
+
+    //나중에 뺴자
+    findPlayer.training.onTrain = false
+
+    if(!trainingInfo){
+      trainingInfo = new Training({pName: findPlayer.pName})
+    }
     if(!findPlayer) res.status(200).json({resultMsg: "no_Player"})
 
     if(findPlayer){
@@ -34,13 +48,20 @@ router.post('/training', async (req, res) => {
 
               findPlayer.stat[randomPosition][randomStat] += plusValue
 
+              resultInfo.plusValue = plusValue
+              resultInfo.plusStat = randomStat
+
               setTimeout(()=>{
-                const trainInfo = Util.afterTraining(findPlayer)
+               Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
                return res.status(200).json({resultMsg: "entire_training_finished", plusValue: plusValue, plusStat: randomStat})
               }, 2000)
             } else{
+
+              resultInfo.plusValue = 0
+              resultInfo.plusStat = null
+
               setTimeout(()=>{
-                Util.afterTraining(findPlayer)
+                Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
                 return res.status(200).json({resultMsg: "entire_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
             }
@@ -56,13 +77,17 @@ router.post('/training', async (req, res) => {
 
               findPlayer.stat[randomPosition][randomStat] += plusValue
 
+              resultInfo.plusValue = plusValue
+              resultInfo.plusStat = randomStat
+
               setTimeout(()=>{
-                Util.afterTraining(findPlayer)
+                Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
                return res.status(200).json({resultMsg: "part_training_finished", plusValue: plusValue, plusStat: randomStat})
               }, 2000)
             } else{
               setTimeout(()=>{
-                Util.afterTraining(findPlayer)
+                resultInfo.plusValue = 0
+                Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
                 return res.status(200).json({resultMsg: "part_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
             }

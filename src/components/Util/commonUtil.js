@@ -1,4 +1,5 @@
 const { FriendshipInfo } = require("../../models/FriendshipInfo");
+const { Training } = require("../../models/Training");
 
 const Util = {
   randomOfArray: (array) => {
@@ -19,7 +20,38 @@ const Util = {
       }
   },
 
-  afterTraining: (playerModel) => {
+  afterTraining: (playerModel, trainingModel,type, resultInfo) => {
+
+    console.log('trainingModel-----before---> ', trainingModel)
+
+    trainingModel.last_training_date = new Date()
+    type == 'entire' ? trainingModel.entireTrainCnt +=1 : trainingModel.partTrainCnt +=1
+
+    if(resultInfo.plusValue>-1){
+      if(trainingModel.plus.value.length >= 7) trainingModel.plus.value = []
+      trainingModel.plus.value.push(resultInfo.plusValue)
+    }
+
+    if(resultInfo.plusStat || resultInfo.plusStat == null){
+      if(trainingModel.plus.stat.length >= 7) trainingModel.plus.stat = []
+      trainingModel.plus.stat.push(resultInfo.plusStat)
+    }
+
+    if(resultInfo.minusValue<0){
+      if(trainingModel.minus.value.length >= 7) trainingModel.minus.value = []
+      trainingModel.minus.value.push(resultInfo.minusValue)
+    }
+
+    if(resultInfo.minusStat){
+      if(trainingModel.minus.stat.length >= 7) trainingModel.minus.stat = []
+      trainingModel.minus.stat.push(resultInfo.minusStat)
+    }
+
+    trainingModel.save()
+
+    console.log('trainingModel-----after---> ', trainingModel)
+
+
     playerModel.training.onTrain = false
     playerModel.training.trainType = null
     playerModel.training.startTime = null

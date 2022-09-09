@@ -17,7 +17,6 @@ router.post('/giveKiss', async (req, res) => {
     const winCnt = recordArr.filter((ele)=> ele == true).length
 
     if(recordArr.length<=3 && winCnt>=1){
-      //날씨 좋으면 추가
       luckyNum += 10
       if(luckyNum>50){
         fsTarget.friendship += 1
@@ -44,7 +43,6 @@ router.post('/giveKiss', async (req, res) => {
     }
 
     if(recordArr.length>=5 && winCnt<=2){
-      //날씨 안좋으면 추가
       luckyNum -= 10
       if(luckyNum<20){
         fsTarget.friendship -= 1
