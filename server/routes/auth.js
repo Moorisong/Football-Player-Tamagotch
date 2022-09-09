@@ -38,6 +38,7 @@ router.post('/auth', (req, res) =>{
     })
   }catch(err){
     if(err) console.log(err)
+    return res.status(500).json({resultMsg: 'internal error'})
   }
 
 })

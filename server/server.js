@@ -9,7 +9,14 @@ const register = require('./routes/register')
 const logIn = require('./routes/logIn')
 const auth = require('./routes/auth')
 const logOut = require('./routes/logOut')
+const main = require('./routes/main')
 const makeNewPlayer = require('./routes/makeNewPlayer')
+const training = require('./routes/training')
+const competition = require('./routes/competition')
+const giveKiss = require('./routes/giveKiss')
+const registerLegend = require('./routes/registerLegend')
+
+
 
 const corsOptions = {
   origin: ["http://localhost:3000"],
@@ -25,7 +32,13 @@ app.use('/', register)
 app.use('/', logIn)
 app.use('/', auth)
 app.use('/', logOut)
+app.use('/', main)
 app.use('/', makeNewPlayer)
+app.use('/', training)
+app.use('/', competition)
+app.use('/', giveKiss)
+app.use('/', registerLegend)
+
 
 app.listen(3001, () => {
   console.log('connected port:3001')
@@ -37,6 +50,6 @@ app.listen(3001, () => {
       console.log('mongoDB connected!')
     })
     .catch(err => {
-      console.log('error--->', err)
+      return console.log('error--->', err)
     })
 })

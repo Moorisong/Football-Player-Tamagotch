@@ -36,8 +36,13 @@ const userSchema = mongoose.Schema({
   },
   club: {
     type: String,
+    requiered: true,
     default: 'none'
   },
+  hasPlayer: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const User = mongoose.model('users', userSchema);

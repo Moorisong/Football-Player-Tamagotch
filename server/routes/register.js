@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
 
   } catch (e) {
     console.log('err---> ', e)
-    res.status(500).json({satus: 500, resultMsg: 'internal error'})
+    return res.status(500).json({resultMsg: 'internal error'})
   }
 })
 

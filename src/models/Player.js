@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const playerSchema = mongoose.Schema({
-  name: {
+  pName: {
     type: String,
     maxlength: 12,
     required: true,
@@ -38,7 +38,7 @@ const playerSchema = mongoose.Schema({
       },
       foot: {
         type: String
-      }
+      },
     },
     defender: {
       defense:{
@@ -84,6 +84,30 @@ const playerSchema = mongoose.Schema({
         type: Number,
       }
     }
+  },
+  training: {
+    onTrain: {
+      type: Boolean,
+      default: false,
+    },
+    trainType: {
+      type: String,
+      default: null
+    },
+    startTime:{
+      type: Date,
+      default: null
+    },
+  },
+  injury: {
+    onInjury: {
+      type: Boolean,
+      default: false,
+    },
+    startTime:{
+      type: Date,
+      default: null
+    },
   }
 })
 
