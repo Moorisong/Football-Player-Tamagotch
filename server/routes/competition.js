@@ -4,7 +4,7 @@ const router = express.Router()
 const { Util } = require('../../src/components/Util/commonUtil')
 const { LatestRecord } = require('../../src/models/LatestRecord')
 const { Legend } = require('../../src/models/Legend')
-
+const { Training } = require('../../src/models/Training')
 
 router.post('/competition', async (req, res)=>{
   try{
@@ -14,7 +14,21 @@ router.post('/competition', async (req, res)=>{
     const legendRecord = await LatestRecord.findOne({pName: req.body.legendPlayerName}).exec()
     const commonRecord = await LatestRecord.findOne({pName: req.body.commonPlayerName}).exec()
 
-    if(!commonPlayer) res.status(200).json({resultMsg: "no_Player"})
+    const cPlayerTinfo = await Training.findOne({pName: req.body.commonPlayerName})
+
+    if(!commonPlayer) return res.status(200).json({resultMsg: "no_Player"})
+    if(legendPlayer.competition.onFight) return res.status(200).json({resultMsg: "already_on_fight"})
+
+    legendPlayer.competition.onFight = true
+    await legendPlayer.save()
+
+    const injury = await Util.occurInjury(commonPlayer, cPlayerTinfo, false)
+
+    if(injury.result){
+      legendPlayer.competition.onFight = false
+      await legendPlayer.save()
+      return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
+    }
 
     const result = Util.compareAndFight(legendPlayer, commonPlayer)
 
@@ -35,6 +49,10 @@ router.post('/competition', async (req, res)=>{
       legendInfo.save()
 
       res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, accWin: legendInfo.accWin})
+
+      legendPlayer.competition.onFight = false
+
+      return legendPlayer.save()
     }
     if(result.legend < result.common) {
 
@@ -43,6 +61,7 @@ router.post('/competition', async (req, res)=>{
 
       legendRecord.record.push(false)
       legendRecord.save()
+
       commonRecord.record.push(true)
       commonRecord.save()
 
@@ -53,9 +72,14 @@ router.post('/competition', async (req, res)=>{
       let currLegend = await new Legend({pName: req.body.commonPlayerName})
       currLegend.turnNum = prevLegend.turnNum + 1
       currLegend.accWin += 1
-      currLegend.save()
+
+      await currLegend.save()
 
       res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, turnNum: currLegend.turnNum})
+
+      legendPlayer.competition.onFight = false
+
+      return legendPlayer.save()
     }
 
   }catch(err){

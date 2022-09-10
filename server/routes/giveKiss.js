@@ -21,24 +21,24 @@ router.post('/giveKiss', async (req, res) => {
       if(luckyNum>50){
         fsTarget.friendship += 1
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'plusOne', mood:'기분 약간 좋음, 날씨 좋음'})
+        return res.status(200).json({resultMsg: 'plusOne', mood: 1})
       }
       if(luckyNum<50){
         fsTarget.friendship += 2
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'plusTwo', mood: '기분 짱 좋음, 날씨 좋음'})
+        return res.status(200).json({resultMsg: 'plusTwo', mood: 2})
       }
     }else if(recordArr.length>=5 && winCnt>=2){
       luckyNum += 20
       if(luckyNum<70){
         fsTarget.friendship += 1
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'plusOne', mood: '그냥 좋음'})
+        return res.status(200).json({resultMsg: 'plusOne', mood: 3})
       }
       if(luckyNum>70){
         fsTarget.friendship += 2
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'plusTwo', mood: '그냥 너무 좋음'})
+        return res.status(200).json({resultMsg: 'plusTwo', mood: 4})
       }
     }
 
@@ -47,21 +47,21 @@ router.post('/giveKiss', async (req, res) => {
       if(luckyNum<20){
         fsTarget.friendship -= 1
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'minusOne', mood:'기분 나쁨, 날씨 안좋음'})
+        return res.status(200).json({resultMsg: 'minusOne', mood: -1})
       }
       if(luckyNum<5){
         fsTarget.friendship -= 2
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'minusTwo', mood:'기분 매우 나쁨, 날씨 안좋음'})
+        return res.status(200).json({resultMsg: 'minusTwo', mood: -2})
       }
       return
     }else{
       if(luckyNum>=50){
         fsTarget.friendship += 1
         await fsTarget.save()
-        return res.status(200).json({resultMsg: 'plusOne', mood: '그럭저럭'})
+        return res.status(200).json({resultMsg: 'plusOne', mood: -3})
       }else{
-        return res.status(200).json({resultMsg: 'noChange', mood: '생각 없음'})
+        return res.status(200).json({resultMsg: 'noChange', mood: -4})
       }
     }
     if(fsTarget.friendship<0) fsTarget.friendship = 0
