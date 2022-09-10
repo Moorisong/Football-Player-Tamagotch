@@ -10,94 +10,108 @@ router.post('/training', async (req, res) => {
     let findPlayer = await Player.findOne({pName: req.body.pName}).exec()
     let trainingInfo = await Training.findOne({pName: req.body.pName}).exec()
 
-    const injury = Util.occurInjury(findPlayer, trainingInfo)
-    if(injury.state) return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
+    //선수 생성 후 첫번째 훈련에서는 부상을 당할 수 없도록
+    findPlayer.training.onTrain = true
+    const injury = await Util.occurInjury(findPlayer, trainingInfo, req.body.trainType)
 
-    let resultInfo = {
-      plusValue: null,
-      plusStat: null,
-      minusValue: null,
-      minusStat: null,
+    if(!trainingInfo) injury.result = false
+
+    //부상 당함
+    if(injury.result){
+
+      return setTimeout(()=>{
+      res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
+      },2000)
     }
 
-    // // 테스트용
-    // findPlayer.training.onTrain = false
+  let resultInfo = {
+    plusValue: null,
+    plusStat: null
+  }
+
+  //부상 당하지 않음
+  if(!injury){
+    if(!findPlayer) return res.status(200).json({resultMsg: "no_Player"})
 
     if(!trainingInfo){
       trainingInfo = new Training({pName: findPlayer.pName})
     }
-    if(!findPlayer) res.status(200).json({resultMsg: "no_Player"})
 
-    if(findPlayer){
+    findPlayer.training.onTrain = true
+    findPlayer.training.trainType = req.body.trainType
+    findPlayer.training.startTime = new Date();
+    findPlayer.save()
 
-      if(findPlayer.training.onTrain == true ) res.json({resultMsg: "already_on_Train", trainType: findPlayer.training.trainType, starTime: findPlayer.training.startTime})
+    if(findPlayer.training.onTrain){
+    //여기서 랜덤 확률로 스탯 UP
+    //전체 훈련일 때
+      if(findPlayer.training.trainType == 'entire'){
+        const pickNumber = Util.makeRandomNumber(100,1)
 
-      if(findPlayer.training.onTrain == false) {
-        findPlayer.training.onTrain = true
-        findPlayer.training.trainType = req.body.trainType
-        findPlayer.training.startTime = new Date();
+      if(pickNumber<=20){
+        const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
+        const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
+        const plusValue = Util.randomOfArray([1,2])
 
-        await findPlayer.save()
+        findPlayer.stat[randomPosition][randomStat] += plusValue
 
-        if(findPlayer.training.onTrain){
-        //여기서 랜덤 확률로 스탯 UP
-        //전체 훈련일 때
-          if(findPlayer.training.trainType == 'entire'){
-            const pickNumber = Util.makeRandomNumber(100,1)
+        resultInfo.plusValue = plusValue
+        resultInfo.plusStat = randomStat
 
-            if(pickNumber<=20){
-              const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
-              const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
-              const plusValue = Util.randomOfArray([1,2])
+        setTimeout(()=>{
 
-              findPlayer.stat[randomPosition][randomStat] += plusValue
+          Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
 
-              resultInfo.plusValue = plusValue
-              resultInfo.plusStat = randomStat
+          findPlayer.training.onTrain = false
+          findPlayer.training.trainType = null
+          findPlayer.training.startTime = null
+          findPlayer.save()
 
-              setTimeout(()=>{
-               Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
-               return res.status(200).json({resultMsg: "entire_training_finished", plusValue: plusValue, plusStat: randomStat})
-              }, 2000)
-            } else{
+          return res.status(200).json({resultMsg: "entire_training_finished", plusValue: plusValue, plusStat: randomStat})
+        }, 2000)
+      } else{
+        resultInfo.plusValue = 0
+        resultInfo.plusStat = null
 
-              resultInfo.plusValue = 0
-              resultInfo.plusStat = null
+        setTimeout(()=>{
+          Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
 
-              setTimeout(()=>{
-                Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
-                return res.status(200).json({resultMsg: "entire_training_finished", plusValue: 0, plusStat: null})
-              }, 2000)
-            }
+          findPlayer.training.onTrain = false
+          findPlayer.training.trainType = null
+          findPlayer.training.startTime = null
+          findPlayer.save()
 
-          //부분 훈련일 때
-          }else if(findPlayer.training.trainType == 'part'){
-            const pickNumber = Util.makeRandomNumber(100,1)
-            if(pickNumber<=40){
-              const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
-              const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
-              const plusValue = 1
+          return res.status(200).json({resultMsg: "entire_training_finished", plusValue: 0, plusStat: null})
+        }, 2000)
+      }
 
-              findPlayer.stat[randomPosition][randomStat] += plusValue
+    //부분 훈련일 때
+    }else if(findPlayer.training.trainType == 'part'){
+      const pickNumber = Util.makeRandomNumber(100,1)
+      if(pickNumber<=40){
+        const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
+        const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
+        const plusValue = 1
 
-              resultInfo.plusValue = plusValue
-              resultInfo.plusStat = randomStat
+        findPlayer.stat[randomPosition][randomStat] += plusValue
 
-              setTimeout(()=>{
-                Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
-               return res.status(200).json({resultMsg: "part_training_finished", plusValue: plusValue, plusStat: randomStat})
-              }, 2000)
-            } else{
-              setTimeout(()=>{
-                resultInfo.plusValue = 0
-                Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
-                return res.status(200).json({resultMsg: "part_training_finished", plusValue: 0, plusStat: null})
-              }, 2000)
-            }
-          }
-        }
+        resultInfo.plusValue = plusValue
+        resultInfo.plusStat = randomStat
+
+        setTimeout(async ()=>{
+          await Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
+          return res.status(200).json({resultMsg: "part_training_finished", plusValue: plusValue, plusStat: randomStat})
+        }, 2000)
+      } else{
+        setTimeout(async ()=>{
+          resultInfo.plusValue = 0
+          await Util.afterTraining(findPlayer, trainingInfo, req.body.trainType, resultInfo)
+          return res.status(200).json({resultMsg: "part_training_finished", plusValue: 0, plusStat: null})
+        }, 2000)
       }
     }
+  }
+}
 
   }catch(err){
     console.log('err----> ', err)

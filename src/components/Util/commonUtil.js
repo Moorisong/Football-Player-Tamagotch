@@ -52,12 +52,6 @@ const Util = {
 
     console.log('trainingModel-----after---> ', trainingModel)
 
-
-    playerModel.training.onTrain = false
-    playerModel.training.trainType = null
-    playerModel.training.startTime = null
-
-    playerModel.save()
   },
 
   sumStatWithType: (player, statType) => {
@@ -130,19 +124,20 @@ const Util = {
     return {legend: legendP_num, common: commonP_num, fightInfo: fightInfo}
   },
 
-  occurInjury: async (pModel, tModel) => {
+  occurInjury: async (pModel, tModel, type) => {
+    try{
       const injuryLuckyNum = Util.makeRandomNumber(100, 1)
       let result = {result: true, minusValue: 0, minusStat: null}
 
       // 20퍼센트의 확률로 부상 발생
       if(injuryLuckyNum<=20){
-
         pModel.injury.onInjury = true
         pModel.injury.startTime  = new Date()
 
         tModel.injury += 1
+        await tModel.save()
 
-        const luckyNum = await Util.makeRandomNumber(100, 1)
+        const luckyNum = Util.makeRandomNumber(100, 1)
 
         //50퍼센트의 확률로 스탯이 1이나 2로 감소함
         if(luckyNum<50){
@@ -152,16 +147,38 @@ const Util = {
           const minusValue = Util.randomOfArray([1,2])
 
           pModel.stat[randomPosition][randomStat] -= minusValue
-          result = {state: true, minusValue: minusValue, minusStat: randomStat}
-          console.log('minus----> ', randomStat)
+          result = {result: true, minusValue: minusValue, minusStat: randomStat}
+
+          console.log('부상!!! trainingInfo-----before---> ', tModel)
+
+          tModel.last_training_date = new Date()
+          if(type){
+            type == 'entire' ? tModel.entireTrainCnt +=1 : tModel.partTrainCnt +=1
+          }
+          if(result.minusValue>-1){
+            if(tModel.minus.value.length >= 7) tModel.minus.value = []
+            tModel.minus.value.push(result.minusValue)
+          }
+
+          if(result.minusStat){
+            if(tModel.minus.stat.length >= 7) tModel.minus.stat = []
+            tModel.minus.stat.push(result.minusStat)
+          }
+          console.log('부상!!! trainingInfo-----after---> ', tModel)
+
+          pModel.training.trainType = null
+          pModel.training.onTrain = false
+          pModel.training.startTime = null
+
+          await pModel.save()
+          await tModel.save()
         }
-
-        pModel.save()
-        tModel.save()
-
         return result
    }
     else return false
+  }catch(err){
+    if(err) console.log('err---->', err)
+    }
   }
 }
 
