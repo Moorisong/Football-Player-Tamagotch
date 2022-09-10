@@ -4,6 +4,7 @@ const router = express.Router()
 const { Util } = require('../../src/components/Util/commonUtil')
 const { LatestRecord } = require('../../src/models/LatestRecord')
 const { Legend } = require('../../src/models/Legend')
+const { Training } = require('../../src/models/Training')
 
 
 router.post('/competition', async (req, res)=>{
@@ -14,7 +15,12 @@ router.post('/competition', async (req, res)=>{
     const legendRecord = await LatestRecord.findOne({pName: req.body.legendPlayerName}).exec()
     const commonRecord = await LatestRecord.findOne({pName: req.body.commonPlayerName}).exec()
 
+    const cPlayerTinfo = await Training.findOne({pName: req.body.commonPlayerName})
+
     if(!commonPlayer) res.status(200).json({resultMsg: "no_Player"})
+
+    const injury = Util.occurInjury(commonPlayer, cPlayerTinfo)
+    return injury ? res.status(200).json({resultMsg: 'common_injury'}) : res.status(500).json({resultMsg: 'internal error'})
 
     const result = Util.compareAndFight(legendPlayer, commonPlayer)
 

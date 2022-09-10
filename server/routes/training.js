@@ -10,15 +10,18 @@ router.post('/training', async (req, res) => {
     let findPlayer = await Player.findOne({pName: req.body.pName}).exec()
     let trainingInfo = await Training.findOne({pName: req.body.pName}).exec()
 
+    const injury = Util.occurInjury(findPlayer, trainingInfo)
+    return injury ? res.status(200).json({resultMsg: 'injury'}) : res.status(500).json({resultMsg: 'internal error'})
+
     let resultInfo = {
       plusValue: null,
       plusStat: null,
       minusValue: null,
-      minusStat: null, 
+      minusStat: null,
     }
 
-    //나중에 뺴자
-    findPlayer.training.onTrain = false
+    // // 테스트용
+    // findPlayer.training.onTrain = false
 
     if(!trainingInfo){
       trainingInfo = new Training({pName: findPlayer.pName})
@@ -41,6 +44,7 @@ router.post('/training', async (req, res) => {
         //전체 훈련일 때
           if(findPlayer.training.trainType == 'entire'){
             const pickNumber = Util.makeRandomNumber(100,1)
+
             if(pickNumber<=20){
               const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
               const randomStat = Util.randomOfArray(Object.keys(findPlayer.stat[randomPosition]))
@@ -65,7 +69,6 @@ router.post('/training', async (req, res) => {
                 return res.status(200).json({resultMsg: "entire_training_finished", plusValue: 0, plusStat: null})
               }, 2000)
             }
-
 
           //부분 훈련일 때
           }else if(findPlayer.training.trainType == 'part'){

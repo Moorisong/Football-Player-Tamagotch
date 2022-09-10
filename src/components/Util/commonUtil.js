@@ -129,6 +129,27 @@ const Util = {
     return {legend: legendP_num, common: commonP_num, fightInfo: fightInfo}
   },
 
+  occurInjury: async (pModel, tModel) =>{
+    try{
+      const injuryLuckyNum = Util.makeRandomNumber(100, 1)
+
+      if(injuryLuckyNum<=20){
+
+        pModel.injury.onInjury = true
+        pModel.injury.startTime  = new Date()
+
+        tModel.injury += 1
+
+        pModel.save()
+        tModel.save()
+
+        return true
+      }
+    }catch(err){
+      if(err) console.log('err--->', err)
+      return false
+     }
+  }
 }
 
 module.exports = { Util }
