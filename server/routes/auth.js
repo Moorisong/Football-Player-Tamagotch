@@ -30,6 +30,7 @@ router.post('/auth', (req, res) =>{
 
           return res.status(200).json({
             result: 'success',
+            id: user.id,
             admin: req.user.role == 0 ? true : false ,
             nickName: user.nickName
           })

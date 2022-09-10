@@ -17,10 +17,15 @@ router.post('/competition', async (req, res)=>{
 
     const cPlayerTinfo = await Training.findOne({pName: req.body.commonPlayerName})
 
-    if(!commonPlayer) res.status(200).json({resultMsg: "no_Player"})
+    if(!commonPlayer) return res.status(200).json({resultMsg: "no_Player"})
+    if(legendPlayer.competition.onFight) return res.status(200).json({resultMsg: "already_on_fight"})
 
-    const injury = Util.occurInjury(commonPlayer, cPlayerTinfo)
-    return injury ? res.status(200).json({resultMsg: 'common_injury'}) : res.status(500).json({resultMsg: 'internal error'})
+    legendPlayer.competition.onFight = true
+    legendPlayer.save()
+
+    const injury = await Util.occurInjury(commonPlayer, cPlayerTinfo)
+    console.log('sdkf', injury)
+    if(injury.state) return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
 
     const result = Util.compareAndFight(legendPlayer, commonPlayer)
 
@@ -41,6 +46,9 @@ router.post('/competition', async (req, res)=>{
       legendInfo.save()
 
       res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, accWin: legendInfo.accWin})
+
+      legendPlayer.competition.onFight = false
+      return legendPlayer.save()
     }
     if(result.legend < result.common) {
 
@@ -62,6 +70,9 @@ router.post('/competition', async (req, res)=>{
       currLegend.save()
 
       res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, turnNum: currLegend.turnNum})
+
+      legendPlayer.competition.onFight = false
+      return legendPlayer.save()
     }
 
   }catch(err){

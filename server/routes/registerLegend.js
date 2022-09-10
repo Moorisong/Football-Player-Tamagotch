@@ -6,6 +6,7 @@ router.post('/registerLegend', async (req, res)=>{
   try{
     const prevLegend = await Legend.findOne({pName: req.body.oldLegendName}).exec()
     prevLegend.time_lastLost = new Date()
+    prevLegend.save()
 
     let currLegend = await new Legend({pName: req.body.newLegendName})
     currLegend.turnNum = prevLegend.turnNum + 1

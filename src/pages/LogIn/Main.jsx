@@ -5,17 +5,19 @@ import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { Const } from '../../components/Const/Const'
 import Board from "../../components/Board/Board";
-import { CookieSharp } from "@mui/icons-material";
+import { CookieSharp, SystemSecurityUpdateWarningSharp } from "@mui/icons-material";
 
 
-export default  function LogIn() {
+export default  function Main() {
   const [registerClicked, setRegisterClicked] = useState(false);
   const [logInState, setLogInState] = useState(()=>JSON.parse(window.localStorage.getItem("logInState")))
   const [cookies, setCookie, removeCookie] = useCookies(['_id']);
+  const [userID, setUserID] = useState(null)
   const nodeRef = useRef(null)
 
   const input_id = useRef(null)
   const input_pw = useRef(null)
+
 
   useEffect(()=>{
     window.localStorage.setItem("logInState", JSON.stringify(logInState))
@@ -36,7 +38,7 @@ function clickLogInBtn(){
     .post('http://localhost:3001/logIn', { "id": id, "pw": pw })
     .then(res => {
       if(res.data.resultMsg == 'logIn_success'){
-        setCookie('_id', res.data.token)
+        setCookie('_id'+'_damagotch_'+ id , res.data.token)
 
         const token = res.data.token
 
@@ -47,6 +49,7 @@ function clickLogInBtn(){
         .then(res => {
 
           if(res.data.result == 'success' ) {
+            setUserID(res.data.id)
             alert(`${res.data.nickName}님 환영합니다.`);
             return setLogInState(true)
           }
@@ -69,11 +72,12 @@ function clickLogInBtn(){
 }
 const onClickLogOut = e => {
   axios
-    .post('http://localhost:3001/logOut')
+    .post('http://localhost:3001/logOut', {id: userID})
     .then(res => {
       if(res.data.resultMsg == 'logOut_success'){
+        console.log('dkfjsdkfj', userID)
          alert('로그아웃 되었습니다.')
-         removeCookie('_id')
+         removeCookie('_id_damagotch_'+userID)
         return setLogInState(false)
       }
     })

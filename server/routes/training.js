@@ -11,7 +11,7 @@ router.post('/training', async (req, res) => {
     let trainingInfo = await Training.findOne({pName: req.body.pName}).exec()
 
     const injury = Util.occurInjury(findPlayer, trainingInfo)
-    return injury ? res.status(200).json({resultMsg: 'injury'}) : res.status(500).json({resultMsg: 'internal error'})
+    if(injury.state) return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
 
     let resultInfo = {
       plusValue: null,

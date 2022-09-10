@@ -1,3 +1,4 @@
+const { LegendToggleRounded } = require("@mui/icons-material");
 const { FriendshipInfo } = require("../../models/FriendshipInfo");
 const { Training } = require("../../models/Training");
 
@@ -129,10 +130,11 @@ const Util = {
     return {legend: legendP_num, common: commonP_num, fightInfo: fightInfo}
   },
 
-  occurInjury: async (pModel, tModel) =>{
-    try{
+  occurInjury: async (pModel, tModel) => {
       const injuryLuckyNum = Util.makeRandomNumber(100, 1)
+      let result = {result: true, minusValue: 0, minusStat: null}
 
+      // 20퍼센트의 확률로 부상 발생
       if(injuryLuckyNum<=20){
 
         pModel.injury.onInjury = true
@@ -140,15 +142,26 @@ const Util = {
 
         tModel.injury += 1
 
+        const luckyNum = await Util.makeRandomNumber(100, 1)
+
+        //50퍼센트의 확률로 스탯이 1이나 2로 감소함
+        if(luckyNum<50){
+
+          const randomPosition = Util.randomOfArray(['defender', 'middle', 'attack', 'goalKeep'])
+          const randomStat = Util.randomOfArray(Object.keys(pModel.stat[randomPosition]))
+          const minusValue = Util.randomOfArray([1,2])
+
+          pModel.stat[randomPosition][randomStat] -= minusValue
+          result = {state: true, minusValue: minusValue, minusStat: randomStat}
+          console.log('minus----> ', randomStat)
+        }
+
         pModel.save()
         tModel.save()
 
-        return true
-      }
-    }catch(err){
-      if(err) console.log('err--->', err)
-      return false
-     }
+        return result
+   }
+    else return false
   }
 }
 

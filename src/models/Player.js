@@ -108,6 +108,12 @@ const playerSchema = mongoose.Schema({
       type: Date,
       default: null
     },
+  },
+  competition: {
+    onFight: {
+      type: Boolean,
+      default: false,
+    }
   }
 })
 
