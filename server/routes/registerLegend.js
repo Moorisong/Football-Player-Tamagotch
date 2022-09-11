@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.post('/registerLegend', async (req, res)=>{
   try{
-    const prevLegend = await Legend.findOne({pName: req.body.oldLegendName}).exec()
+    const prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
     prevLegend.time_lastLost = new Date()
     prevLegend.save()
 

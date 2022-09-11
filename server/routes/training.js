@@ -12,9 +12,9 @@ router.post('/training', async (req, res) => {
 
     //선수 생성 후 첫번째 훈련에서는 부상을 당할 수 없도록
     findPlayer.training.onTrain = true
-    const injury = await Util.occurInjury(findPlayer, trainingInfo, req.body.trainType)
+    let injury = await Util.occurInjury(findPlayer, trainingInfo, req.body.trainType)
 
-    if(!trainingInfo) injury.result = false
+    if(!trainingInfo) injury = false
 
     //부상 당함
     if(injury.result){

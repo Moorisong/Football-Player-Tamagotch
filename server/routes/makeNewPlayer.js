@@ -9,7 +9,7 @@ const { User } = require('../../src/models/User')
 router.post('/makeNewPlayer', async (req, res)=>{
   try{
     let userInfo = await User.findOne({id: req.body.userId}).exec()
-    if(userInfo.hasPlayer) return res.status(403).json({resultMsg: 'already has player'})
+    if(userInfo.playerInfo.hasPlayer) return res.status(403).json({resultMsg: 'already has player'})
 
     const playerNameFind = await Player.findOne({pName: req.body.pName}).exec()
     if(playerNameFind) return res.status(403).json({resultMsg: 'duplicated player name'})
@@ -55,7 +55,8 @@ router.post('/makeNewPlayer', async (req, res)=>{
     latestRecord.pName = req.body.pName
     latestRecord.save()
 
-    userInfo.hasPlayer = true
+    userInfo.playerInfo.hasPlayer = true
+    userInfo.playerInfo.playerName = req.body.pName
     await userInfo.save()
 
     res.status(200).json({resultMsg: 'succees'})

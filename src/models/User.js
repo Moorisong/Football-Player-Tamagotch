@@ -39,10 +39,19 @@ const userSchema = mongoose.Schema({
     requiered: true,
     default: 'none'
   },
-  hasPlayer: {
-    type: Boolean,
-    default: false,
-  }
+  playerInfo: {
+    hasPlayer: {
+      type: Boolean,
+      default: false,
+    },
+    playerName: {
+      type: String,
+      maxlength: 12,
+      lowerCase: true,
+      unique: true,
+      default: null,
+    },
+  },
 })
 
 const User = mongoose.model('users', userSchema);
