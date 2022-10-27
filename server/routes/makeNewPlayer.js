@@ -11,13 +11,20 @@ router.post('/makeNewPlayer', async (req, res)=>{
     let userInfo = await User.findOne({id: req.body.userId}).exec()
     if(userInfo.playerInfo.hasPlayer) return res.status(403).json({resultMsg: 'already has player'})
 
-    const playerNameFind = await Player.findOne({pName: req.body.pName}).exec()
-    if(playerNameFind) return res.status(403).json({resultMsg: 'duplicated player name'})
+    await Player.findOne({pName: req.body.pName},(err, doc)=>{
+      // 자고 일어나면 보일까.....??ㅠㅠ 힘내라 미래의 나...
+      console.log('1111')
+
+      if(doc) res.status(403).json({resultMsg: 'duplicated player name'})
+    })
+    console.log('222222')
+
 
     let player = new Player(req.body)
 
     var country = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium",,"Bermuda","Bhutan","Bolivia","Bosnia Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Cayman Islands","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cruise Ship","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyz Republic","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Namibia","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Samoa","San Marino","Satellite","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","St Lucia","St Vincent","St. Lucia","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tonga","Tunisia","Turkey","Turkmenistan", "Uganda","Ukraine","United Arab Emirates","United Kingdom","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
     const foot = ['left','right','both']
+    console.log('3333333')
 
     player.pName = req.body.pName
     player.country = Util.randomOfArray(country, country.length, null)
@@ -47,13 +54,8 @@ router.post('/makeNewPlayer', async (req, res)=>{
 
     player.save();
 
-    let friendship = await new FriendshipInfo(req.body)
-    friendship.name = req.body.pName
-    friendship.save()
-
-    let latestRecord = await new LatestRecord(req.body)
-    latestRecord.pName = req.body.pName
-    latestRecord.save()
+    FriendshipInfo.create({pName: req.body.pName})
+    LatestRecord.create({pName: req.body.pName})
 
     userInfo.playerInfo.hasPlayer = true
     userInfo.playerInfo.playerName = req.body.pName
