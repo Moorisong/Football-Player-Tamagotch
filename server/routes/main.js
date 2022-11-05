@@ -1,24 +1,28 @@
 const express = require('express')
 const { Legend } = require('../../src/models/Legend')
 const { Player } = require('../../src/models/Player')
+const { User } = require('../../src/models/User')
+const { LatestRecord } = require('../../src/models/LatestRecord')
 const router = express.Router()
 
-router.post('/main', async (req, res)=>{
-try{
-  if(req.body.legendPlayer=='none'){
-    req.body.legendPlayer = 'SH.Kim'
-    const firstLegend = await new Legend({pName: req.body.legendPlayer})
-    firstLegend.save()
-  }
+router.post('/main', async (req, res) => {
+  try {
+    Legend.findOne({ pName: 'SH.Kim' }, (err, doc) => {
+      if (!doc) {
+        Legend.create({ pName: 'SH.Kim' })
+        LatestRecord.create({ pName: 'SH.Kim' })
+      }
+    })
 
-  let legend = await Legend.findOne().sort({ _id: -1 })
+    const user = await User.findOne({ id: req.body.id }).exec()
+    let legend = await Legend.findOne().sort({ pName: -1 })
 
-  console.log("leg---> ", legend)
-  return res.status(200).json({result: 'success'})
+    console.log('Legend---11----> ', legend)
 
-}catch(err){
-  if(err) console.log('err---> ', err)
-  return res.status(500).json({resultMsg: 'internal error'})
+    return res.status(200).json({ result: 'success' })
+  } catch (err) {
+    if (err) console.log('err---> ', err)
+    return res.status(500).json({ resultMsg: 'internal error' })
   }
 })
 

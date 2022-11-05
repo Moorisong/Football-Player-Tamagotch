@@ -45,6 +45,7 @@ app.listen(3001, () => {
   mongoose
     .connect(
       'mongodb+srv://ksh:ksh@songcluster.hgpfq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+      // 'mongodb://ksh:ksh@songcluster-shard-00-00.hgpfq.mongodb.net:27017,songcluster-shard-00-01.hgpfq.mongodb.net:27017,songcluster-shard-00-02.hgpfq.mongodb.net:27017/?ssl=true&replicaSet=atlas-12y8wq-shard-0&authSource=admin&retryWrites=true&w=majority'
     )
     .then(() => {
       console.log('mongoDB connected!')
