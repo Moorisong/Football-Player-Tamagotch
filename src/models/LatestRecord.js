@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const latestRecord = mongoose.Schema({
-  pName:{
+  pName: {
     type: String,
     maxlength: 12,
     required: true,
@@ -9,13 +9,14 @@ const latestRecord = mongoose.Schema({
   },
   record: {
     type: Array,
-    maxlength: 7
+    maxlength: 7,
+    default: [],
   },
   legend_record: {
     type: Number,
-    default: 0
+    default: 0,
   },
 })
 
-const LatestRecord = mongoose.model('latestRecords', latestRecord);
-module.exports = { LatestRecord };
+const LatestRecord = mongoose.model('latestRecords', latestRecord)
+module.exports = { LatestRecord }
