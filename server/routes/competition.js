@@ -65,7 +65,7 @@ router.post('/competition', async (req, res)=>{
       commonRecord.record.push(true)
       commonRecord.save()
 
-      const prevLegend = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
+      const prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
       prevLegend.time_lastLost = new Date()
       prevLegend.save()
 
