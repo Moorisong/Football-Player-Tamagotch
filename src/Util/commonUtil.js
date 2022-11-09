@@ -1,6 +1,6 @@
 const { LegendToggleRounded } = require('@mui/icons-material')
-const { FriendshipInfo } = require('../../models/FriendshipInfo')
-const { Training } = require('../../models/Training')
+const { FriendshipInfo } = require('../models/FriendshipInfo')
+const { Training } = require('../models/Training')
 
 const Util = {
   randomOfArray: array => {

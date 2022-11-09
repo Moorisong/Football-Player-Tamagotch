@@ -2,7 +2,7 @@ const express = require('express')
 const { Player } = require('../../src/models/Player')
 const router = express.Router()
 const { Training } = require('../../src/models/Training')
-const { Util } = require('../../src/components/Util/commonUtil')
+const { Util } = require('../../src/Util/commonUtil')
 
 router.post('/training', async (req, res) => {
   try {
@@ -59,7 +59,7 @@ router.post('/training', async (req, res) => {
       req.body.trainType
     )
 
-    if (!trainingInfo) injury = false
+    if (!trainingInfo) injury.result = false
 
     //부상 당함
     if (injury.result) {
