@@ -59,7 +59,7 @@ router.post('/training', async (req, res) => {
       req.body.trainType
     )
 
-    if (!trainingInfo) injury = false
+    if (!trainingInfo) injury.result = false
 
     //부상 당함
     if (injury.result) {
