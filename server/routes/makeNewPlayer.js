@@ -1,4 +1,4 @@
-const { Util } = require('../../src/components/Util/commonUtil')
+const { Util } = require('../../src/Util/commonUtil')
 const express = require('express')
 const router = express.Router()
 const { Player } = require('../../src/models/Player')
@@ -12,13 +12,10 @@ router.post('/makeNewPlayer', async (req, res) => {
     if (userInfo.playerInfo.hasPlayer)
       return res.status(403).json({ resultMsg: 'already has player' })
 
-    // await Player.findOne({pName: req.body.pName},(err, doc)=>{
-    //   // 자고 일어나면 보일까.....??ㅠㅠ 힘내라 미래의 나...
-    //   console.log('1111')
-
-    //   if(doc) res.status(403).json({resultMsg: 'duplicated player name'})
-    // })
-    // console.log('222222')
+    let playerInfo = await Player.findOne({pName: req.body.pName}).exec()
+    if(playerInfo){
+      return res.status(403).json({ resultMsg: 'duplicated pName' })
+    }
 
     let player = new Player(req.body)
 

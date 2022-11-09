@@ -1,7 +1,7 @@
 const express = require('express')
 const { Player } = require('../../src/models/Player')
 const router = express.Router()
-const { Util } = require('../../src/components/Util/commonUtil')
+const { Util } = require('../../src/Util/commonUtil')
 const { LatestRecord } = require('../../src/models/LatestRecord')
 const { Legend } = require('../../src/models/Legend')
 const { Training } = require('../../src/models/Training')
