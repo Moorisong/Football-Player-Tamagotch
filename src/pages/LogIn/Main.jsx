@@ -75,7 +75,6 @@ const onClickLogOut = e => {
     .post('http://localhost:3001/logOut', {id: userID})
     .then(res => {
       if(res.data.resultMsg == 'logOut_success'){
-        console.log('dkfjsdkfj', userID)
          alert('로그아웃 되었습니다.')
          removeCookie('_id_damagotch_'+userID)
         return setLogInState(false)

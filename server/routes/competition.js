@@ -39,20 +39,24 @@ router.post('/competition', async (req, res)=>{
 
     if(result.legend > result.common){
 
-      //개선 필요 #27
-      if(legendRecord.record.length >= 7){
-        legRecArr = legendRecord.record
-        legRecArr.slice(1, legRecArr.length+1)
+      //  4개 유지
+      if(legendRecord.record.length >= 4){
+        // LatestRecord.update({pName: req.body.legendPlayerName},{$pop:{"record": -1}})
+        legendRecord.record.splice(0,1)
       }
-      if(commonRecord.record.length >= 7){
-        commRecArr = commonRecord.record
-        commRecArr.slice(1, commRecArr.length+1)
+      if(commonRecord.record.length >= 4){
+        // LatestRecord.update({pName: req.body.commonPlayerName},{$pop:{"record": -1}})
+        commonRecord.record.splice(0,1)
+
       }
 
       legendRecord.record.push(true)
       await legendRecord.save()
       commonRecord.record.push(false)
       await commonRecord.save()
+
+      console.log('after --->leg---> ', legendRecord.record)
+      console.log('after --->common---> ', commonRecord.record)
 
       let legendInfo = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
       legendInfo.accWin += 1
@@ -66,14 +70,13 @@ router.post('/competition', async (req, res)=>{
     }
     if(result.legend < result.common) {
 
-      //개선 필요 #27
-      if(legendRecord.record.length == 7){
-        legRecArr = legendRecord.record
-        legRecArr.slice(1, legRecArr.length+1)
+      if(legendRecord.record.length >= 4){
+        // LatestRecord.update({pName: req.body.legendPlayerName},{$pop:{"record": -1}})
+        legendRecord.record.splice(0,1)
       }
-      if(commonRecord.record.length == 7){
-        commRecArr = commonRecord.record
-        commRecArr.slice(1, commRecArr.length+1)
+      if(commonRecord.record.length >= 4){
+        // LatestRecord.update({pName: req.body.commonPlayerName},{$pop:{"record": -1}})
+        commonRecord.record.splice(0,1)
       }
 
       legendRecord.record.push(false)
@@ -81,6 +84,9 @@ router.post('/competition', async (req, res)=>{
 
       commonRecord.record.push(true)
       commonRecord.save()
+
+      console.log('after --->leg---> ', legendRecord.record)
+      console.log('after --->common---> ', commonRecord.record)
 
       const prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
       prevLegend.time_lastLost = new Date()
