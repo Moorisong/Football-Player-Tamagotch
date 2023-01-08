@@ -8,7 +8,7 @@ const Util = {
     const maxRandomVal = Math.floor(Math.random() * array.length)
     return array[maxRandomVal]
   },
-
+  
   makeRandomNumber: (max = null, min = null) => {
     //min 값은 1부터 넣어야함
     //최대값과 범위 안의 값을 반환할 수 있으며, 최소값 기능은 없음

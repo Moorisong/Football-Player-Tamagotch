@@ -28,8 +28,10 @@ router.post('/competition', async (req, res)=>{
     if(injury.result){
       legendPlayer.competition.onFight = false
       commonPlayer.competition.onFight = false
+
       await legendPlayer.save()
       await commonPlayer.save()
+
       return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
     }
 
@@ -37,27 +39,25 @@ router.post('/competition', async (req, res)=>{
 
     if(!result) throw(err)
 
-    if(result.legend > result.common){
+    const hasWonLegend = result.legend > result.common
 
-      //  4개 유지
-      if(legendRecord.record.length >= 4){
-        // LatestRecord.update({pName: req.body.legendPlayerName},{$pop:{"record": -1}})
-        legendRecord.record.splice(0,1)
-      }
-      if(commonRecord.record.length >= 4){
-        // LatestRecord.update({pName: req.body.commonPlayerName},{$pop:{"record": -1}})
-        commonRecord.record.splice(0,1)
+    legendRecord.record.push(hasWonLegend)
+    commonRecord.record.push(!hasWonLegend)
 
-      }
+    if(legendRecord.record.length > 4){
+      legendRecord.record = legendRecord.record.slice(1,5)
+    }
+    if(commonRecord.record.length > 4){
+      commonRecord.record = commonRecord.record.slice(1,5)
+    }
 
-      legendRecord.record.push(true)
-      await legendRecord.save()
-      commonRecord.record.push(false)
-      await commonRecord.save()
+    await legendRecord.save()
+    await commonRecord.save()
 
-      console.log('after --->leg---> ', legendRecord.record)
-      console.log('after --->common---> ', commonRecord.record)
+    // console.log('legend---222---> ', legendRecord.record);
+    // console.log('common---222---> ', commonRecord.record);
 
+    if(hasWonLegend){
       let legendInfo = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
       legendInfo.accWin += 1
       legendInfo.save()
@@ -65,30 +65,9 @@ router.post('/competition', async (req, res)=>{
       res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, accWin: legendInfo.accWin})
 
       legendPlayer.competition.onFight = false
-
-      return legendPlayer.save()
-    }
-    if(result.legend < result.common) {
-
-      if(legendRecord.record.length >= 4){
-        // LatestRecord.update({pName: req.body.legendPlayerName},{$pop:{"record": -1}})
-        legendRecord.record.splice(0,1)
-      }
-      if(commonRecord.record.length >= 4){
-        // LatestRecord.update({pName: req.body.commonPlayerName},{$pop:{"record": -1}})
-        commonRecord.record.splice(0,1)
-      }
-
-      legendRecord.record.push(false)
-      legendRecord.save()
-
-      commonRecord.record.push(true)
-      commonRecord.save()
-
-      console.log('after --->leg---> ', legendRecord.record)
-      console.log('after --->common---> ', commonRecord.record)
-
-      const prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
+      legendPlayer.save()
+    }else{
+      let prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
       prevLegend.time_lastLost = new Date()
       prevLegend.save()
 
@@ -102,10 +81,10 @@ router.post('/competition', async (req, res)=>{
 
       legendPlayer.competition.onFight = false
 
-      return legendPlayer.save()
+      legendPlayer.save()
     }
 
-  }catch(err){
+    }catch(err){
     if(err) console.log('err---->', err)
     return res.status(500).json({resultMsg: 'internal error'})
   }
