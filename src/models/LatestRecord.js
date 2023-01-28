@@ -9,7 +9,7 @@ const latestRecord = mongoose.Schema({
   },
   record: {
     type: Array,
-    maxlength: 7,
+    maxlength: 4,
     default: [],
   },
   legend_record: {

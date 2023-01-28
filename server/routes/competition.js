@@ -28,8 +28,10 @@ router.post('/competition', async (req, res)=>{
     if(injury.result){
       legendPlayer.competition.onFight = false
       commonPlayer.competition.onFight = false
+
       await legendPlayer.save()
       await commonPlayer.save()
+
       return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
     }
 
@@ -37,23 +39,22 @@ router.post('/competition', async (req, res)=>{
 
     if(!result) throw(err)
 
-    if(result.legend > result.common){
+    const hasWonLegend = result.legend > result.common
 
-      //개선 필요 #27
-      if(legendRecord.record.length >= 7){
-        legRecArr = legendRecord.record
-        legRecArr.slice(1, legRecArr.length+1)
-      }
-      if(commonRecord.record.length >= 7){
-        commRecArr = commonRecord.record
-        commRecArr.slice(1, commRecArr.length+1)
-      }
+    legendRecord.record.push(hasWonLegend)
+    commonRecord.record.push(!hasWonLegend)
 
-      legendRecord.record.push(true)
-      await legendRecord.save()
-      commonRecord.record.push(false)
-      await commonRecord.save()
+    if(legendRecord.record.length > 7){
+      legendRecord.record = legendRecord.record.slice(1,5)
+    }
+    if(commonRecord.record.length > 7){
+      commonRecord.record = commonRecord.record.slice(1,5)
+    }
 
+    await legendRecord.save()
+    await commonRecord.save()
+
+    if(hasWonLegend){
       let legendInfo = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
       legendInfo.accWin += 1
       legendInfo.save()
@@ -61,28 +62,9 @@ router.post('/competition', async (req, res)=>{
       res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, accWin: legendInfo.accWin})
 
       legendPlayer.competition.onFight = false
-
-      return legendPlayer.save()
-    }
-    if(result.legend < result.common) {
-
-      //개선 필요 #27
-      if(legendRecord.record.length == 7){
-        legRecArr = legendRecord.record
-        legRecArr.slice(1, legRecArr.length+1)
-      }
-      if(commonRecord.record.length == 7){
-        commRecArr = commonRecord.record
-        commRecArr.slice(1, commRecArr.length+1)
-      }
-
-      legendRecord.record.push(false)
-      legendRecord.save()
-
-      commonRecord.record.push(true)
-      commonRecord.save()
-
-      const prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
+      legendPlayer.save()
+    }else{
+      let prevLegend = await Legend.findOne().sort({ _id: -1 }).exec()
       prevLegend.time_lastLost = new Date()
       prevLegend.save()
 
@@ -96,10 +78,10 @@ router.post('/competition', async (req, res)=>{
 
       legendPlayer.competition.onFight = false
 
-      return legendPlayer.save()
+      legendPlayer.save()
     }
 
-  }catch(err){
+    }catch(err){
     if(err) console.log('err---->', err)
     return res.status(500).json({resultMsg: 'internal error'})
   }
