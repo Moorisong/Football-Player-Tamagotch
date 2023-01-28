@@ -44,18 +44,15 @@ router.post('/competition', async (req, res)=>{
     legendRecord.record.push(hasWonLegend)
     commonRecord.record.push(!hasWonLegend)
 
-    if(legendRecord.record.length > 4){
+    if(legendRecord.record.length > 7){
       legendRecord.record = legendRecord.record.slice(1,5)
     }
-    if(commonRecord.record.length > 4){
+    if(commonRecord.record.length > 7){
       commonRecord.record = commonRecord.record.slice(1,5)
     }
 
     await legendRecord.save()
     await commonRecord.save()
-
-    // console.log('legend---222---> ', legendRecord.record);
-    // console.log('common---222---> ', commonRecord.record);
 
     if(hasWonLegend){
       let legendInfo = await Legend.findOne({pName: req.body.legendPlayerName}).exec()
