@@ -66,10 +66,12 @@ router.post('/training', async (req, res) => {
       return setTimeout(() => {
         res.status(200).json({
           resultMsg: 'common_injury',
-          minusValue: injury.minusValue,
-          minusStat: injury.minusStat,
+          rs: {
+            minusValue: injury.minusValue,
+            minusStat: injury.minusStat,
+          }
         })
-      }, 2000)
+      }, 1000)
     }
 
     let resultInfo = {
@@ -128,10 +130,12 @@ router.post('/training', async (req, res) => {
 
               return res.status(200).json({
                 resultMsg: 'entire_training_finished',
-                plusValue: plusValue,
-                plusStat: randomStat,
+                rs: {
+                  plusValue: plusValue,
+                  plusStat: randomStat,
+                }
               })
-            }, 2000)
+            }, 1000)
           } else {
             resultInfo.plusValue = 0
             resultInfo.plusStat = null
@@ -151,10 +155,12 @@ router.post('/training', async (req, res) => {
 
               return res.status(200).json({
                 resultMsg: 'entire_training_finished',
-                plusValue: 0,
-                plusStat: null,
+                rs: {
+                  plusValue: 0,
+                  plusStat: null,
+                }
               })
-            }, 2000)
+            }, 1000)
           }
 
           //부분 훈련일 때
@@ -186,10 +192,12 @@ router.post('/training', async (req, res) => {
               )
               return res.status(200).json({
                 resultMsg: 'part_training_finished',
-                plusValue: plusValue,
-                plusStat: randomStat,
+                rs: {
+                  plusValue: plusValue,
+                  plusStat: randomStat,
+                }
               })
-            }, 2000)
+            }, 1000)
           } else {
             setTimeout(async () => {
               resultInfo.plusValue = 0
@@ -201,10 +209,12 @@ router.post('/training', async (req, res) => {
               )
               return res.status(200).json({
                 resultMsg: 'part_training_finished',
-                plusValue: 0,
-                plusStat: null,
+                rs: {
+                  plusValue: 0,
+                  plusStat: null,
+                }
               })
-            }, 2000)
+            }, 1000)
           }
         }
       }

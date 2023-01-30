@@ -13,7 +13,12 @@ router.post('/registerLegend', async (req, res)=>{
     currLegend.accWin += 1
     currLegend.save()
 
-    res.status(200).json({resultMsg: "success", turnNum: currLegend.turnNum})
+    res.status(200).json({
+      resultMsg: "success",
+      rs: {
+        turnNum: currLegend.turnNum
+      }
+    })
 
   }catch(err){
     if(err) console.log('err---> ', err)
