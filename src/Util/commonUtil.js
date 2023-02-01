@@ -8,7 +8,7 @@ const Util = {
     const maxRandomVal = Math.floor(Math.random() * array.length)
     return array[maxRandomVal]
   },
-  
+
   makeRandomNumber: (max = null, min = null) => {
     //min 값은 1부터 넣어야함
     //최대값과 범위 안의 값을 반환할 수 있으며, 최소값 기능은 없음
@@ -125,8 +125,8 @@ const Util = {
       const injuryLuckyNum = Util.makeRandomNumber(100, 1)
       let result = { result: true, minusValue: 0, minusStat: null }
 
-      // 20퍼센트의 확률로 부상 발생
-      if (injuryLuckyNum <= 20) {
+      // 10퍼센트의 확률로 부상 발생
+      if (injuryLuckyNum <= 10) {
         pModel.injury.onInjury = true
         pModel.injury.startTime = new Date()
 
@@ -158,6 +158,7 @@ const Util = {
           // console.log('부상!!! trainingInfo-----before---> ', tModel)
 
           tModel.last_training_date = new Date()
+
           if (type) {
             type == 'entire'
               ? (tModel.entireTrainCnt += 1)

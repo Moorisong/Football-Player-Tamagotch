@@ -63,7 +63,7 @@ router.post('/training', async (req, res) => {
 
     //부상 당함
     if (injury.result) {
-      return setTimeout(() => {
+       return setTimeout(() => {
         res.status(200).json({
           resultMsg: 'common_injury',
           rs: {
@@ -98,7 +98,7 @@ router.post('/training', async (req, res) => {
         if (findPlayer.training.trainType == 'entire') {
           const pickNumber = Util.makeRandomNumber(100, 1)
 
-          if (pickNumber <= 20) {
+          if (pickNumber <= 50) {
             const randomPosition = Util.randomOfArray([
               'defender',
               'middle',
@@ -108,7 +108,7 @@ router.post('/training', async (req, res) => {
             const randomStat = Util.randomOfArray(
               Object.keys(findPlayer.stat[randomPosition])
             )
-            const plusValue = Util.randomOfArray([1, 2])
+            const plusValue = Util.randomOfArray([1, 2, 1, 2, 5])
 
             findPlayer.stat[randomPosition][randomStat] += plusValue
 
@@ -166,7 +166,8 @@ router.post('/training', async (req, res) => {
           //부분 훈련일 때
         } else if (findPlayer.training.trainType == 'part') {
           const pickNumber = Util.makeRandomNumber(100, 1)
-          if (pickNumber <= 40) {
+          
+          if (pickNumber <= 50) {
             const randomPosition = Util.randomOfArray([
               'defender',
               'middle',
@@ -219,6 +220,7 @@ router.post('/training', async (req, res) => {
         }
       }
     }
+
   } catch (err) {
     console.log('err----> ', err)
     res.status(500).json({ resultMsg: 'internal error' })
