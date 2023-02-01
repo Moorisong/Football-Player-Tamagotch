@@ -127,8 +127,8 @@ const Util = {
 
       // 10퍼센트의 확률로 부상 발생
       if (injuryLuckyNum <= 10) {
-        pModel.injury.onInjury = true
-        pModel.injury.startTime = new Date()
+        // pModel.injury.onInjury = true
+        // pModel.injury.startTime = new Date()
 
         tModel.injury += 1
         await tModel.save()
