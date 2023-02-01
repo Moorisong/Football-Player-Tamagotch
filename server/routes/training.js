@@ -97,126 +97,78 @@ router.post('/training', async (req, res) => {
         //전체 훈련일 때
         if (findPlayer.training.trainType == 'entire') {
           const pickNumber = Util.makeRandomNumber(100, 1)
+          const randomPosition = Util.randomOfArray([
+            'defender',
+            'middle',
+            'attack',
+            'goalKeep',
+          ])
+          const plusValue = pickNumber <= 50 ? Util.randomOfArray([1, 2, 1, 2, 5]) : 0
+          const randomStat = plusValue == 0 ? null : Util.randomOfArray(
+            Object.keys(findPlayer.stat[randomPosition])
+          )
 
-          if (pickNumber <= 50) {
-            const randomPosition = Util.randomOfArray([
-              'defender',
-              'middle',
-              'attack',
-              'goalKeep',
-            ])
-            const randomStat = Util.randomOfArray(
-              Object.keys(findPlayer.stat[randomPosition])
+          findPlayer.stat[randomPosition][randomStat] += plusValue
+
+          resultInfo.plusValue = plusValue
+          resultInfo.plusStat = randomStat
+
+          setTimeout(() => {
+            Util.afterTraining(
+              findPlayer,
+              trainingInfo,
+              req.body.trainType,
+              resultInfo
             )
-            const plusValue = Util.randomOfArray([1, 2, 1, 2, 5])
 
-            findPlayer.stat[randomPosition][randomStat] += plusValue
+            findPlayer.training.onTrain = false
+            findPlayer.training.trainType = null
+            findPlayer.training.startTime = null
+            findPlayer.save()
 
-            resultInfo.plusValue = plusValue
-            resultInfo.plusStat = randomStat
-
-            setTimeout(() => {
-              Util.afterTraining(
-                findPlayer,
-                trainingInfo,
-                req.body.trainType,
-                resultInfo
-              )
-
-              findPlayer.training.onTrain = false
-              findPlayer.training.trainType = null
-              findPlayer.training.startTime = null
-              findPlayer.save()
-
-              return res.status(200).json({
-                resultMsg: 'entire_training_finished',
-                rs: {
-                  plusValue: plusValue,
-                  plusStat: randomStat,
-                }
-              })
-            }, 1000)
-          } else {
-            resultInfo.plusValue = 0
-            resultInfo.plusStat = null
-
-            setTimeout(() => {
-              Util.afterTraining(
-                findPlayer,
-                trainingInfo,
-                req.body.trainType,
-                resultInfo
-              )
-
-              findPlayer.training.onTrain = false
-              findPlayer.training.trainType = null
-              findPlayer.training.startTime = null
-              findPlayer.save()
-
-              return res.status(200).json({
-                resultMsg: 'entire_training_finished',
-                rs: {
-                  plusValue: 0,
-                  plusStat: null,
-                }
-              })
-            }, 1000)
-          }
+            return res.status(200).json({
+              resultMsg: 'entire_training_finished',
+              rs: {
+                plusValue: plusValue,
+                plusStat: randomStat,
+              }
+            })
+          }, 1000)
 
           //부분 훈련일 때
         } else if (findPlayer.training.trainType == 'part') {
           const pickNumber = Util.makeRandomNumber(100, 1)
-          
-          if (pickNumber <= 50) {
-            const randomPosition = Util.randomOfArray([
-              'defender',
-              'middle',
-              'attack',
-              'goalKeep',
-            ])
-            const randomStat = Util.randomOfArray(
-              Object.keys(findPlayer.stat[randomPosition])
+          const randomPosition = Util.randomOfArray([
+            'defender',
+            'middle',
+            'attack',
+            'goalKeep',
+          ])
+          const plusValue = pickNumber <= 50 ? 1 : 0
+          const randomStat = plusValue == 0 ? null : Util.randomOfArray(
+            Object.keys(findPlayer.stat[randomPosition])
+          )
+
+          findPlayer.stat[randomPosition][randomStat] += plusValue
+
+          resultInfo.plusValue = plusValue
+          resultInfo.plusStat = randomStat
+
+          setTimeout(async () => {
+            await Util.afterTraining(
+              findPlayer,
+              trainingInfo,
+              req.body.trainType,
+              resultInfo
             )
-            const plusValue = 1
-
-            findPlayer.stat[randomPosition][randomStat] += plusValue
-
-            resultInfo.plusValue = plusValue
-            resultInfo.plusStat = randomStat
-
-            setTimeout(async () => {
-              await Util.afterTraining(
-                findPlayer,
-                trainingInfo,
-                req.body.trainType,
-                resultInfo
-              )
-              return res.status(200).json({
-                resultMsg: 'part_training_finished',
-                rs: {
-                  plusValue: plusValue,
-                  plusStat: randomStat,
-                }
-              })
-            }, 1000)
-          } else {
-            setTimeout(async () => {
-              resultInfo.plusValue = 0
-              await Util.afterTraining(
-                findPlayer,
-                trainingInfo,
-                req.body.trainType,
-                resultInfo
-              )
-              return res.status(200).json({
-                resultMsg: 'part_training_finished',
-                rs: {
-                  plusValue: 0,
-                  plusStat: null,
-                }
-              })
-            }, 1000)
-          }
+            return res.status(200).json({
+              resultMsg: 'part_training_finished',
+              rs: {
+                plusValue: plusValue,
+                plusStat: randomStat
+              }
+            })
+          }, 1000)
         }
       }
     }
