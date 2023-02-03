@@ -32,7 +32,13 @@ router.post('/competition', async (req, res)=>{
       await legendPlayer.save()
       await commonPlayer.save()
 
-      return res.status(200).json({resultMsg: 'common_injury', minusValue: injury.minusValue, minusStat: injury.minusStat})
+      return res.status(200).json({
+        resultMsg: 'common_injury',
+        rs: {
+          minusValue: injury.minusValue,
+          minusStat: injury.minusStat
+        }
+      })
     }
 
     const result = Util.compareAndFight(legendPlayer, commonPlayer)
@@ -59,7 +65,15 @@ router.post('/competition', async (req, res)=>{
       legendInfo.accWin += 1
       legendInfo.save()
 
-      res.status(200).json({resultMsg: 'legend_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, accWin: legendInfo.accWin})
+      res.status(200).json({
+        resultMsg: 'legend_win',
+        rs: {
+          legendScore: result.legend,
+          commonScore: result.common,
+          fightInfo: result.fightInfo,
+          accWin: legendInfo.accWin
+        }
+      })
 
       legendPlayer.competition.onFight = false
       legendPlayer.save()
@@ -74,10 +88,17 @@ router.post('/competition', async (req, res)=>{
 
       await currLegend.save()
 
-      res.status(200).json({resultMsg: 'common_win', legendScore: result.legend, commonScore: result.common, fightInfo: result.fightInfo, turnNum: currLegend.turnNum})
+      res.status(200).json({
+        resultMsg: 'common_win',
+        rs: {
+          legendScore: result.legend,
+          commonScore: result.common,
+          fightInfo: result.fightInfo,
+          turnNum: currLegend.turnNum
+        }
+      })
 
       legendPlayer.competition.onFight = false
-
       legendPlayer.save()
     }
 
