@@ -8,6 +8,8 @@ router.post('/training', async (req, res) => {
   try {
     let findPlayer = await Player.findOne({ pName: req.body.pName }).exec()
     let trainingInfo = await Training.findOne({ pName: req.body.pName }).exec()
+    const INCREASE_VALUE_ARR = [1, 2, 1, 2, 5];
+    const POSITION_ARR = ['defender', 'middle', 'attack', 'goalKeep'];
 
     Training.findOne({ pName: 'SH.Kim' }, (err, doc) => {
       if (!doc) {
@@ -79,6 +81,16 @@ router.post('/training', async (req, res) => {
       plusStat: null,
     }
 
+    const randomPosition = Util.randomOfArray(POSITION_ARR)
+    const getPlusValue = () => {
+      const pickNumber = Util.makeRandomNumber(100, 1)
+      if(findPlayer.training.trainType == 'entire'){
+        return pickNumber <= 50 ? Util.randomOfArray(INCREASE_VALUE_ARR) : 0
+      } else {
+        return pickNumber <= 50 ? 1 : 0
+      }
+    }
+
     //부상 당하지 않음
     if (!injury) {
       if (!findPlayer) return res.status(200).json({ resultMsg: 'no_Player' })
@@ -95,84 +107,39 @@ router.post('/training', async (req, res) => {
       if (findPlayer.training.onTrain) {
         //여기서 랜덤 확률로 스탯 UP
         //전체 훈련일 때
-        if (findPlayer.training.trainType == 'entire') {
-          const pickNumber = Util.makeRandomNumber(100, 1)
-          const randomPosition = Util.randomOfArray([
-            'defender',
-            'middle',
-            'attack',
-            'goalKeep',
-          ])
-          const plusValue = pickNumber <= 50 ? Util.randomOfArray([1, 2, 1, 2, 5]) : 0
-          const randomStat = plusValue == 0 ? null : Util.randomOfArray(
-            Object.keys(findPlayer.stat[randomPosition])
+        const plusValue = getPlusValue()
+        const randomStat = plusValue == 0 ? null : Util.randomOfArray(
+          Object.keys(findPlayer.stat[randomPosition])
+        )
+
+        findPlayer.stat[randomPosition][randomStat] += plusValue
+
+        resultInfo.plusValue = plusValue
+        resultInfo.plusStat = randomStat
+
+        setTimeout(() => {
+          Util.afterTraining(
+            findPlayer,
+            trainingInfo,
+            req.body.trainType,
+            resultInfo
           )
 
-          findPlayer.stat[randomPosition][randomStat] += plusValue
+          findPlayer.training.onTrain = false
+          findPlayer.training.trainType = null
+          findPlayer.training.startTime = null
+          findPlayer.save()
 
-          resultInfo.plusValue = plusValue
-          resultInfo.plusStat = randomStat
-
-          setTimeout(() => {
-            Util.afterTraining(
-              findPlayer,
-              trainingInfo,
-              req.body.trainType,
-              resultInfo
-            )
-
-            findPlayer.training.onTrain = false
-            findPlayer.training.trainType = null
-            findPlayer.training.startTime = null
-            findPlayer.save()
-
-            return res.status(200).json({
-              resultMsg: 'entire_training_finished',
-              rs: {
-                plusValue: plusValue,
-                plusStat: randomStat,
-              }
-            })
-          }, 1000)
-
-          //부분 훈련일 때
-        } else if (findPlayer.training.trainType == 'part') {
-          const pickNumber = Util.makeRandomNumber(100, 1)
-          const randomPosition = Util.randomOfArray([
-            'defender',
-            'middle',
-            'attack',
-            'goalKeep',
-          ])
-          const plusValue = pickNumber <= 50 ? 1 : 0
-          const randomStat = plusValue == 0 ? null : Util.randomOfArray(
-            Object.keys(findPlayer.stat[randomPosition])
-          )
-
-          findPlayer.stat[randomPosition][randomStat] += plusValue
-
-          resultInfo.plusValue = plusValue
-          resultInfo.plusStat = randomStat
-
-          setTimeout(async () => {
-            await Util.afterTraining(
-              findPlayer,
-              trainingInfo,
-              req.body.trainType,
-              resultInfo
-            )
-            return res.status(200).json({
-              resultMsg: 'part_training_finished',
-              rs: {
-                plusValue: plusValue,
-                plusStat: randomStat
-              }
-            })
-          }, 1000)
-        }
+          return res.status(200).json({
+            resultMsg: req.body.trainType + '_training_finished',
+            rs: {
+              plusValue: plusValue,
+              plusStat: randomStat,
+            }
+          })
+        }, 1000)
       }
     }
-
   } catch (err) {
     console.log('err----> ', err)
     res.status(500).json({ resultMsg: 'internal error' })
