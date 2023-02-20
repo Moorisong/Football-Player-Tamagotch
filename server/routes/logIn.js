@@ -31,10 +31,8 @@ router.post('/logIn', (req, res) => {
                 .status(200)
                 .json({
                   resultMsg: 'logIn_success',
-                  rs:{
-                    userId: user.id,
-                    token: token,
-                  }
+                  userId: user.id,
+                  token: token,
                 })
             })
           } else {

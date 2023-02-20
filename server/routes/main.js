@@ -15,7 +15,7 @@ router.post('/main', async (req, res) => {
     })
 
     const user = await User.findOne({ id: req.body.id }).exec()
-    
+
     if(!user.playerInfo.hasPlayer){
       return res.status(500).json({ resultMsg: 'noPlayer' })
 
@@ -65,7 +65,7 @@ router.post('/main', async (req, res) => {
       }
     }
 
-    return res.status(200).json({ result: 'success', rs: rs})
+    return res.status(200).json({ result: 'success', rs})
   } catch (err) {
     if (err) console.log('err---> ', err)
     return res.status(500).json({ resultMsg: 'internal error' })

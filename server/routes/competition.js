@@ -34,10 +34,8 @@ router.post('/competition', async (req, res)=>{
 
       return res.status(200).json({
         resultMsg: 'common_injury',
-        rs: {
-          minusValue: injury.minusValue,
-          minusStat: injury.minusStat
-        }
+        minusValue: injury.minusValue,
+        minusStat: injury.minusStat
       })
     }
 
@@ -67,12 +65,10 @@ router.post('/competition', async (req, res)=>{
 
       res.status(200).json({
         resultMsg: 'legend_win',
-        rs: {
-          legendScore: result.legend,
-          commonScore: result.common,
-          fightInfo: result.fightInfo,
-          accWin: legendInfo.accWin
-        }
+        legendScore: result.legend,
+        commonScore: result.common,
+        fightInfo: result.fightInfo,
+        accWin: legendInfo.accWin
       })
 
       legendPlayer.competition.onFight = false
@@ -90,12 +86,10 @@ router.post('/competition', async (req, res)=>{
 
       res.status(200).json({
         resultMsg: 'common_win',
-        rs: {
-          legendScore: result.legend,
-          commonScore: result.common,
-          fightInfo: result.fightInfo,
-          turnNum: currLegend.turnNum
-        }
+        legendScore: result.legend,
+        commonScore: result.common,
+        fightInfo: result.fightInfo,
+        turnNum: currLegend.turnNum
       })
 
       legendPlayer.competition.onFight = false

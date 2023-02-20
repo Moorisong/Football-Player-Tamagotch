@@ -68,10 +68,8 @@ router.post('/training', async (req, res) => {
        return setTimeout(() => {
         res.status(200).json({
           resultMsg: 'common_injury',
-          rs: {
-            minusValue: injury.minusValue,
-            minusStat: injury.minusStat,
-          }
+          minusValue: injury.minusValue,
+          minusStat: injury.minusStat,
         })
       }, 1000)
     }
@@ -132,10 +130,8 @@ router.post('/training', async (req, res) => {
 
           return res.status(200).json({
             resultMsg: req.body.trainType + '_training_finished',
-            rs: {
-              plusValue: plusValue,
-              plusStat: randomStat,
-            }
+            plusValue: plusValue,
+            plusStat: randomStat,
           })
         }, 1000)
       }

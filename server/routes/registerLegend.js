@@ -15,9 +15,7 @@ router.post('/registerLegend', async (req, res)=>{
 
     res.status(200).json({
       resultMsg: "success",
-      rs: {
-        turnNum: currLegend.turnNum
-      }
+      turnNum: currLegend.turnNum
     })
 
   }catch(err){
