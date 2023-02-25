@@ -63,7 +63,7 @@ router.post('/training', async (req, res) => {
 
     if (!trainingInfo) injury.result = false
 
-    //부상 당함
+    //부상 발생 시
     if (injury.result) {
        return setTimeout(() => {
         res.status(200).json({
