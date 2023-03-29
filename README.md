@@ -1,6 +1,9 @@
 # Football-Player-Tamagotch
 축구 선수 육성 다마고치
 
+## 기술 스택
+- Node.js / Javascript / React.js / Mongo DB
+
 ## 현재까지 느낀 점들
 - 2022년 9월 9일
   - 기획-디자인-백엔드-프론트엔드 혼자 다 하니까, 편한 점도 많지만
