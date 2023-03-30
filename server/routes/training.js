@@ -1,8 +1,8 @@
 const express = require('express')
-const { Player } = require('../../src/models/Player')
+const { Player } = require('../models/Player')
 const router = express.Router()
-const { Training } = require('../../src/models/Training')
-const { Util } = require('../../src/Util/commonUtil')
+const { Training } = require('../models/Training')
+const { Util } = require('../Util/commonUtil')
 
 router.post('/training', async (req, res) => {
   try {

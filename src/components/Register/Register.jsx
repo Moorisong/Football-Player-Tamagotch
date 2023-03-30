@@ -55,17 +55,17 @@ export default function Register() {
       }),
     })
       .then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           console.log('res---> ', res)
           return res.json()
         }
       })
       .then(result => {
         console.log('result--> ', result)
-        if (result.resultMsg == 'success') {
+        if (result.resultMsg === 'success') {
           setIdAdded(true)
           alert('회원 가입 완료! 로그인 해주시기 바랍니다.');
-        }else if(result.resultMsg == 'duplicated ID'){
+        }else if(result.resultMsg === 'duplicated ID'){
           alert("이미 존재하는 ID입니다.");
           return false
         } else {
