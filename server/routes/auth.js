@@ -2,7 +2,7 @@ const { NextPlan, ContactSupportOutlined } = require('@mui/icons-material')
 const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
-const { User } = require('../../src/models/User')
+const { User } = require('../models/User')
 
 router.post('/auth', (req, res) =>{
 

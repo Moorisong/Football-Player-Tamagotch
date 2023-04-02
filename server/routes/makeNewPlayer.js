@@ -1,10 +1,10 @@
-const { Util } = require('../../src/Util/commonUtil')
+const { Util } = require('../Util/commonUtil')
 const express = require('express')
 const router = express.Router()
-const { Player } = require('../../src/models/Player')
-const { FriendshipInfo } = require('../../src/models/FriendshipInfo')
-const { LatestRecord } = require('../../src/models/LatestRecord')
-const { User } = require('../../src/models/User')
+const { Player } = require('../models/Player')
+const { FriendshipInfo } = require('../models/FriendshipInfo')
+const { LatestRecord } = require('../models/LatestRecord')
+const { User } = require('../models/User')
 
 router.post('/makeNewPlayer', async (req, res) => {
   try {

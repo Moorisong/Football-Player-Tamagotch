@@ -1,8 +1,8 @@
 const express = require('express')
-const { Legend } = require('../../src/models/Legend')
-const { Player } = require('../../src/models/Player')
-const { User } = require('../../src/models/User')
-const { LatestRecord } = require('../../src/models/LatestRecord')
+const { Legend } = require('../models/Legend')
+const { Player } = require('../models/Player')
+const { User } = require('../models/User')
+const { LatestRecord } = require('../models/LatestRecord')
 const router = express.Router()
 
 router.post('/main', async (req, res) => {

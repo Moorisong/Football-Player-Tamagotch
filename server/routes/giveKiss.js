@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { FriendshipInfo } = require('../../src/models/FriendshipInfo')
-const { Util } = require('../../src/Util/commonUtil')
-const { LatestRecord } = require('../../src/models/LatestRecord')
+const { FriendshipInfo } = require('../models/FriendshipInfo')
+const { Util } = require('../Util/commonUtil')
+const { LatestRecord } = require('../models/LatestRecord')
 
 router.post('/giveKiss', async (req, res) => {
   try {

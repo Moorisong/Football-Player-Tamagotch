@@ -1,5 +1,5 @@
 const express = require('express')
-const { Legend } = require('../../src/models/Legend')
+const { Legend } = require('../models/Legend')
 const router = express.Router()
 
 router.post('/registerLegend', async (req, res)=>{

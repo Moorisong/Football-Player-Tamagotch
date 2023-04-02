@@ -1,10 +1,10 @@
 const express = require('express')
-const { Player } = require('../../src/models/Player')
+const { Player } = require('../models/Player')
 const router = express.Router()
-const { Util } = require('../../src/Util/commonUtil')
-const { LatestRecord } = require('../../src/models/LatestRecord')
-const { Legend } = require('../../src/models/Legend')
-const { Training } = require('../../src/models/Training')
+const { Util } = require('../Util/commonUtil')
+const { LatestRecord } = require('../models/LatestRecord')
+const { Legend } = require('../models/Legend')
+const { Training } = require('../models/Training')
 
 router.post('/competition', async (req, res)=>{
   try{
