@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom"
-import LogIn from './pages/LogIn/Main'
+import Register from "./components/Register/Register"
 
   export default function RoutesSet() {
 
     return (
       <Routes>
-        <Route path="/*" element={<LogIn />} />
+        <Route path="/*" element={<Register />} />
       </Routes>
     )
   }

@@ -1,5 +1,6 @@
 import styles from './Register.module.css'
 import { useRef, useState } from 'react'
+import { doReqPost } from '../../Util/Api'
 
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
@@ -40,39 +41,48 @@ export default function Register() {
       return false
     }
 
-    fetch('http://localhost:3001/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: id,
-        pw: pw,
-        age: age,
-        sex: sex,
-        nickName: nickName,
-        club: club,
-      }),
-    })
-      .then(res => {
-        if (res.status === 200) {
-          console.log('res---> ', res)
-          return res.json()
+      const param = {
+          id: id,
+          pw: pw,
+          age: age,
+          sex: sex,
+          nickName: nickName,
+          club: club,
         }
+      // doReqPost('http://localhost:3001/register', param)
+      // .then((res) => {
+      //   console.log("sdfdsf----> ", res)
+        // if(res.status === 200) {
+        //   res.json()
+        //   .then((d)=>{
+        //     console.log("data---> ", d)
+        //   })
+        // }
+      // })
+
+      doReqPost('http://localhost:3001/register', param)
+      .then(response => {
+        console.log('re---> ', response)
       })
-      .then(result => {
-        console.log('result--> ', result)
-        if (result.resultMsg === 'success') {
-          setIdAdded(true)
-          alert('회원 가입 완료! 로그인 해주시기 바랍니다.');
-        }else if(result.resultMsg === 'duplicated ID'){
-          alert("이미 존재하는 ID입니다.");
-          return false
-        } else {
-          alert('에러가 발생하였습니다');
-          console.log('에러---->', result.errorMsg)
-        }
-      })
+      .catch(error => {
+        // 에러 핸들링
+      });
+
+
+
+      // .then(result => {
+      //   console.log('result--> ', result)
+      //   if (result.resultMsg === 'success') {
+      //     setIdAdded(true)
+      //     alert('회원 가입 완료! 로그인 해주시기 바랍니다.');
+      //   }else if(result.resultMsg === 'duplicated ID'){
+      //     alert("이미 존재하는 ID입니다.");
+      //     return false
+      //   }else{
+      //     alert('에러가 발생하였습니다');
+      //     console.log('에러---->', result.errorMsg)
+      //   }
+      // })
   }
 
   return (
