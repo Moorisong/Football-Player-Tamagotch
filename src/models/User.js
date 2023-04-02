@@ -34,6 +34,10 @@ const userSchema = mongoose.Schema({
     type: Number,
     default: 1,
   },
+  registerDate:{
+    type: Date,
+    default: Date.now(),
+  },  
   club: {
     type: String,
     requiered: true,
@@ -49,7 +53,6 @@ const userSchema = mongoose.Schema({
       maxlength: 12,
       lowerCase: true,
       unique: true,
-      default: null,
     },
   },
 })

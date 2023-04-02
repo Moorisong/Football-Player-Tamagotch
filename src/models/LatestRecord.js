@@ -12,10 +12,6 @@ const latestRecord = mongoose.Schema({
     maxlength: 4,
     default: [],
   },
-  legend_record: {
-    type: Number,
-    default: 0,
-  },
 })
 
 const LatestRecord = mongoose.model('latestRecords', latestRecord)
