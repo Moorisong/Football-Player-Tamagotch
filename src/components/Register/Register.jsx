@@ -1,6 +1,6 @@
 import styles from './Register.module.css'
 import { useRef, useState } from 'react'
-import { doReqPost } from '../../Util/Api'
+import * as util from '../../Util/Api'
 
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
@@ -49,40 +49,22 @@ export default function Register() {
           nickName: nickName,
           club: club,
         }
-      // doReqPost('http://localhost:3001/register', param)
-      // .then((res) => {
-      //   console.log("sdfdsf----> ", res)
-        // if(res.status === 200) {
-        //   res.json()
-        //   .then((d)=>{
-        //     console.log("data---> ", d)
-        //   })
-        // }
-      // })
 
-      doReqPost('http://localhost:3001/register', param)
-      .then(response => {
-        console.log('re---> ', response)
+
+      const result = util.doReqPost('http://localhost:3001/register', param).then((result) =>{
+        console.log('re---> ', result)
+        if(result.resultMsg === 'success') {
+          // setIdAdded(true)
+          // 가입 성공은 잘 뜨는데 아이디 중복부터 아예 값이 안넘어옴
+          alert('회원 가입 완료! 로그인 해주시기 바랍니다.');
+        }else if(result.resultMsg === 'duplicated ID'){
+          alert("이미 존재하는 ID입니다.");
+          return false
+        }else{
+          alert('에러가 발생하였습니다');
+          console.log('에러---->', result.errorMsg)
+        }
       })
-      .catch(error => {
-        // 에러 핸들링
-      });
-
-
-
-      // .then(result => {
-      //   console.log('result--> ', result)
-      //   if (result.resultMsg === 'success') {
-      //     setIdAdded(true)
-      //     alert('회원 가입 완료! 로그인 해주시기 바랍니다.');
-      //   }else if(result.resultMsg === 'duplicated ID'){
-      //     alert("이미 존재하는 ID입니다.");
-      //     return false
-      //   }else{
-      //     alert('에러가 발생하였습니다');
-      //     console.log('에러---->', result.errorMsg)
-      //   }
-      // })
   }
 
   return (
