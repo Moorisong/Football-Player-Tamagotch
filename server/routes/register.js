@@ -7,7 +7,6 @@ router.post('/register', async (req, res) => {
   try {
     const userFind = await User.findOne({ id: req.body.id }).exec()
     if (userFind) return res.status(403).json({ resultMsg: 'duplicated ID' })
-
     let user = new User(req.body)
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(req.body.pw, salt)
@@ -16,7 +15,6 @@ router.post('/register', async (req, res) => {
     user.playerInfo.playerName = `no_${req.body.id}`
 
     await user.save()
-    console.log('111---> ', user)
     console.log(`[${user.id}] 님의 정보가 추가되었습니다.`)
     res.json({ resultMsg: 'success' })
 

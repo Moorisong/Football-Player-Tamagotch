@@ -1,4 +1,3 @@
-import { useState } from "react"
 
 export async function doReqPost(url, param){
   const result = await fetch(url, {

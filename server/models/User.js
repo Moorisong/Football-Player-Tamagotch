@@ -50,7 +50,7 @@ const userSchema = mongoose.Schema({
     },
     playerName: {
       type: String,
-      maxlength: 12,
+      maxlength: 25,
       lowerCase: true,
       unique: true,
     },

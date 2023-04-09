@@ -5,16 +5,12 @@ import * as util from '../../Util/Api'
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
 
-  let id, pw, age, sex, nickName, club
-
   const input_id = useRef(null)
   const input_pw = useRef(null)
   const input_age = useRef(null)
   const input_sex = useRef(null)
   const input_nickName = useRef(null)
   const input_club = useRef(null)
-
-
 
   const inputInfo = [
     {
@@ -50,19 +46,19 @@ export default function Register() {
   ]
 
   function valueCheck() {
-
     let check = /^[0-9]+$/
-    // const eleArr = ['id', 'pw', 'age', 'sex', 'nickName', 'club']
+    const emptyIdx = inputInfo.findIndex((e)=> e.ref.current.value === '')
+
+    if(emptyIdx > -1){
+      alert('모든 항목을 입력해주세요.')
+      return false
+    }
 
     inputInfo.forEach((ele)=>{
-      // 에러난다 송현아
       const val = ele.ref.current.value
-      if(!val){
-        alert('모든 항목을 입력해주세요.')
-        return false
-      }
+      
       if(ele.name === 'id' && val.length > 20){
-        alert('ID는 20글자까지 허용됩니다. 현재 글자수 : ' + id.length)
+        alert('ID는 20글자까지 허용됩니다. 현재 글자수 : ' + val.length)
         return false
       }
       if(ele.name === 'pw' && val.length < 3){
@@ -73,54 +69,24 @@ export default function Register() {
         alert('나이는 숫자로 입력해주세요.')
         return false
       }
-      if(ele.name === 'sex' && !check.test(val)){
+      if(ele.name === 'sex' && check.test(val)){
         alert('성별은 문자로 입력해주세요.')
         return false
       }
-
     })
-
-    // id = input_id.current.value
-    // pw = input_pw.current.value
-    // age = input_age.current.value
-    // sex = input_sex.current.value
-    // nickName = input_nickName.current.value
-    // club = input_club.current.value
-
-    // if (!id || !pw || !age || !sex || !nickName || !club) {
-    //   alert('모든 항목을 입력해주세요.')
-    //   return false
-    // }
-
-    // if (id.length > 20) {
-    //   alert('ID는 20글자까지 허용됩니다. 현재 글자수 : ' + id.length)
-    //   return false
-    // } else if (pw.length < 3) {
-    //   alert('패스워드는 3글자 이상으로 설정해주세요.')
-    //   return false
-    // } else if (!check.test(age)) {
-    //   alert('나이는 숫자로 입력해주세요.')
-    //   return false
-    // } else if (check.test(sex)) {
-    //   alert('성별은 문자로 입력해주세요.')
-    //   return false
-    // }
   }
 
   function submitRegister() {
-
-
+    const param = {
+      id: input_id.current.value,
+      pw: input_pw.current.value,
+      age: input_age.current.value,
+      sex: input_sex.current.value,
+      nickName: input_nickName.current.value,
+      club: input_club.current.value,
+    }
 
     valueCheck()
-
-    const param = {
-      id: id,
-      pw: pw,
-      age: age,
-      sex: sex,
-      nickName: nickName,
-      club: club,
-    }
 
     util.doReqPost('http://localhost:3001/register', param).then(result => {
       if (result.resultMsg === 'success') {
@@ -140,12 +106,12 @@ export default function Register() {
     <>
       <div className={styles.textBoxWrap}>
         {!idAdded && inputInfo?.map((ele, idx) =>
-            <input key = {ele.ref+idx}
-              type="text"
-              placeholder={ele.placeholder}
-              ref={ele.ref}
-              className={styles.textBox}
-            />
+          <input key = {ele.ref+idx}
+            type="text"
+            placeholder={ele.placeholder}
+            ref={ele.ref}
+            className={styles.textBox}
+          />
         )}
         <button onClick={submitRegister} className={styles.RegisterBtn}>
           가입하기
