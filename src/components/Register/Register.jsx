@@ -1,9 +1,11 @@
 import styles from './Register.module.css'
 import { useRef, useState } from 'react'
 import * as util from '../../Util/Api'
+import { useNavigate } from 'react-router'
 
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
+  const nav = useNavigate()
 
   const input_id = useRef(null)
   const input_pw = useRef(null)
@@ -56,7 +58,7 @@ export default function Register() {
 
     inputInfo.forEach((ele)=>{
       const val = ele.ref.current.value
-      
+
       if(ele.name === 'id' && val.length > 20){
         alert('ID는 20글자까지 허용됩니다. 현재 글자수 : ' + val.length)
         return false
@@ -92,6 +94,8 @@ export default function Register() {
       if (result.resultMsg === 'success') {
         setIdAdded(true)
         alert('회원 가입 완료! 로그인 해주시기 바랍니다.')
+        nav('/Main')
+
       } else if (result.resultMsg === 'duplicated ID') {
         alert('이미 존재하는 ID입니다.')
         return false
@@ -104,6 +108,7 @@ export default function Register() {
 
   return (
     <>
+      <p>가입 페이지</p>
       <div className={styles.textBoxWrap}>
         {!idAdded && inputInfo?.map((ele, idx) =>
           <input key = {ele.ref+idx}
@@ -113,9 +118,9 @@ export default function Register() {
             className={styles.textBox}
           />
         )}
-        <button onClick={submitRegister} className={styles.RegisterBtn}>
+        {!idAdded && <button onClick={submitRegister} className={styles.submitBtn}>
           가입하기
-        </button>
+        </button>}
       </div>
     </>
   )
