@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
+  const [valCheckState, setValCheckState] = useState(false)
   const nav = useNavigate()
 
   const input_id = useRef(null)
@@ -76,6 +77,7 @@ export default function Register() {
         return false
       }
     })
+    setValCheckState(true)
   }
 
   function submitRegister() {
@@ -90,20 +92,26 @@ export default function Register() {
 
     valueCheck()
 
-    util.doReqPost('http://localhost:3001/register', param).then(result => {
-      if (result.resultMsg === 'success') {
-        setIdAdded(true)
-        alert('회원 가입 완료! 로그인 해주시기 바랍니다.')
-        nav('/Main')
+    if(valCheckState){
+      util.doReqPost('http://localhost:3001/register', param).then(result => {
+        if (result.resultMsg === 'success') {
+          setIdAdded(true)
+          alert('회원 가입 완료! 로그인 해주시기 바랍니다.')
+          nav('/LogIn')
 
-      } else if (result.resultMsg === 'duplicated ID') {
-        alert('이미 존재하는 ID입니다.')
-        return false
-      } else {
-        alert('에러가 발생하였습니다')
-        console.log('Error---->', result.errorMsg)
-      }
-    })
+        } else if (result.resultMsg === 'duplicated ID') {
+          alert('이미 존재하는 ID입니다.')
+          return false
+        } else {
+          alert('에러가 발생하였습니다')
+          console.log('Error---->', result.errorMsg)
+        }
+      })
+    }
+  }
+
+  function clickCancleBtn(){
+    return nav('/LogIn')
   }
 
   return (
@@ -120,6 +128,9 @@ export default function Register() {
         )}
         {!idAdded && <button onClick={submitRegister} className={styles.submitBtn}>
           가입하기
+        </button>}
+        {!idAdded && <button onClick={clickCancleBtn} className={styles.submitBtn}>
+          돌아가기
         </button>}
       </div>
     </>

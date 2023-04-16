@@ -10,11 +10,6 @@ export default function LogIn() {
 
   const input_id = useRef(null)
   const input_pw = useRef(null)
-  const input_age = useRef(null)
-  const input_sex = useRef(null)
-  const input_nickName = useRef(null)
-  const input_club = useRef(null)
-
   const inputInfo = [
     {
       name: 'id',
@@ -26,11 +21,9 @@ export default function LogIn() {
       placeholder: 'PW 입력',
       ref: input_pw,
     },
-
   ]
 
-  function valueCheck() {
-    let check = /^[0-9]+$/
+  function valueCheck () {
     const emptyIdx = inputInfo.findIndex((e)=> e.ref.current.value === '')
 
     if(emptyIdx > -1){
@@ -60,18 +53,17 @@ export default function LogIn() {
       pw: input_pw.current.value,
     }
 
-    valueCheck()
+    setLoginState(valueCheck)
     if(valCheckState){
       util.doReqPost('http://localhost:3001/logIn', param).then(result => {
         if (result.resultMsg === 'logIn_success') {
           setLoginState(true)
           alert('로그인 완료!')
+          nav('/Main')
         } else if(result.resultMsg === 'notFoundID'){
           alert('일치하는 ID가 없습니다.')
-          return false
         } else if(result.resultMsg === 'notFoundPw'){
           alert('비밀번호를 다시 입력해주세요.')
-          return false
         }else {
           alert('에러가 발생하였습니다')
           console.log('Error---->', result.errorMsg)
@@ -86,6 +78,7 @@ export default function LogIn() {
 
   return (
     <>
+      <p>로그인 페이지</p>
       <div className={styles.textBoxWrap}>
         {!loginState && inputInfo?.map((ele, idx) =>
           <input key = {ele.ref+idx}
