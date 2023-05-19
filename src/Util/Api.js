@@ -1,5 +1,5 @@
 
-export async function doReqPost(url, param){
+async function doReqPost(url, param){
   const result = await fetch(url, {
     method: 'POST',
     headers: {
@@ -14,3 +14,5 @@ export async function doReqPost(url, param){
     })
   return result
   }
+
+  export { doReqPost }

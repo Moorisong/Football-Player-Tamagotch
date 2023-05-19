@@ -1,91 +1,83 @@
 import styles from './LogIn.module.css'
-import { useRef, useState } from 'react'
-import * as util from '../../Util/Api'
+import { useState } from 'react'
+import { doReqPost } from '../../Util/Api'
 import { useNavigate } from 'react-router'
 
 export default function LogIn() {
+
+  const navigate = useNavigate()
   const [loginState, setLoginState] = useState(false)
   const [valCheckState, setValCheckState] = useState(false)
-  const nav = useNavigate()
-
-  const input_id = useRef(null)
-  const input_pw = useRef(null)
-  const inputInfo = [
+  let [loginInfo, setLoginInfo] = useState([
     {
       name: 'id',
       placeholder: 'ID 입력',
-      ref: input_id,
+      value: ''
     },
     {
       name: 'pw',
       placeholder: 'PW 입력',
-      ref: input_pw,
+      value: ''
     },
-  ]
+  ])
 
   function valueCheck () {
-    const emptyIdx = inputInfo.findIndex((e)=> e.ref.current.value === '')
+    loginInfo.forEach((e) => {
+      if(e.value === '') alert('모든 항목을 입력해주세요.')
+      else if(e.name === 'id' && e.value.length > 20) alert('ID는 20글자까지 허용됩니다. 현재 글자수 : ' + e.val.length)
+      else if(e.name === 'pw' && e.value.length < 3) alert('패스워드는 3글자 이상으로 설정해주세요.')
+      else return setValCheckState(true)
 
-    if(emptyIdx > -1){
-      alert('모든 항목을 입력해주세요.')
-      return false
-    }
-
-    inputInfo.forEach((ele)=>{
-      const val = ele.ref.current.value
-
-      if(ele.name === 'id' && val.length > 20){
-        alert('ID는 20글자까지 허용됩니다. 현재 글자수 : ' + val.length)
-        return false
-      }
-      if(ele.name === 'pw' && val.length < 3){
-        alert('패스워드는 3글자 이상으로 설정해주세요.')
-        return false
-      }
+      // ksh --- 항목 하나 안적고 로그인하기 클릭 -> 패스워드 3글자 안되게 입력 -> 경고창 한번 뜨고 로그인 실행됨, 로그인 실행되면 안됨
     })
-
-    setValCheckState(true)
   }
 
   function submitLogIn() {
     const param = {
-      id: input_id.current.value,
-      pw: input_pw.current.value,
+      id: loginInfo[0].value,
+      pw: loginInfo[1].value
     }
 
-    setLoginState(valueCheck)
+    setLoginState(valueCheck())
+
     if(valCheckState){
-      util.doReqPost('http://localhost:3001/logIn', param).then(result => {
+
+      doReqPost('http://localhost:3001/logIn', param).then(result => {
         if (result.resultMsg === 'logIn_success') {
           setLoginState(true)
           alert('로그인 완료!')
-          nav('/Main')
-        } else if(result.resultMsg === 'notFoundID'){
-          alert('일치하는 ID가 없습니다.')
-        } else if(result.resultMsg === 'notFoundPw'){
-          alert('비밀번호를 다시 입력해주세요.')
-        }else {
+          return navigate('/Main')
+        }
+
+        if(result.resultMsg === 'notFoundID') alert('일치하는 ID가 없습니다.')
+        else if(result.resultMsg === 'notFoundPw') alert('비밀번호를 다시 입력해주세요.')
+        else{
           alert('에러가 발생하였습니다')
           console.log('Error---->', result.errorMsg)
         }
+
       })
     }
   }
 
   function clickRgisterBtn(){
-    return nav('/Register')
+    return navigate('/Register')
   }
 
   return (
     <>
       <p>로그인 페이지</p>
       <div className={styles.textBoxWrap}>
-        {!loginState && inputInfo?.map((ele, idx) =>
+        {!loginState && loginInfo?.map((ele, idx) =>
           <input key = {ele.ref+idx}
             type="text"
             placeholder={ele.placeholder}
-            ref={ele.ref}
             className={styles.textBox}
+            onChange={(e)=>{
+              let copy = [...loginInfo]
+              copy[idx].value = e.target.value
+              setLoginInfo(copy)
+            }}
           />
         )}
         { !loginState && <button onClick={submitLogIn} className={styles.submitBtn}>
