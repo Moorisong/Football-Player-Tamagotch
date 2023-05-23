@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
-import Main from "./components/Main/Main"
-import Register from "./components/Register/Register"
-import LogIn from "./components/LogIn/LogIn"
+import Main from "./routes/Main/Main"
+import Register from "./routes/Register/Register"
+import LogIn from "./routes/LogIn/LogIn"
 
   export default function RoutesSet() {
     return (
