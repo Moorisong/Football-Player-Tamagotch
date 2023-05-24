@@ -8,6 +8,8 @@ import FaceOutlinedIcon from '@mui/icons-material/FaceOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import SportsKabaddiIcon from '@mui/icons-material/SportsKabaddi'
 import { styled } from '@mui/system'
+import { relative } from 'path'
+import classNames from 'classnames'
 
 export default function LogIn() {
   const navigate = useNavigate()
@@ -15,38 +17,44 @@ export default function LogIn() {
   const [pw, setPw] = useState('')
 
   const invailidMsg = useMemo(() => {
-    if (!id || !pw) return '다 써라'
-    if (id.lenth <= 20) return '20자 이하로'
-    if (pw.length < 3) return '3자 이상 써라'
+    if (!id && !pw) return 'none'
+    if (id && !pw) return '비밀번호를 입력해주세요.'
+    if (!id && pw) return 'ID를 입력해주세요.'
+    if (id.lenth <= 20) return 'ID는 20자 이하로 생성 가능합니다.'
+    if (pw.length < 3) return '비밀번호는 3자 이상으로 설정해주세요.'
     return ''
   }, [id, pw])
 
   function submitLogIn() {
-    if (invailidMsg) return alert(invailidMsg)
 
     const param = {
       id: id,
       pw: pw,
     }
 
-    doReqPost('http://localhost:3001/logIn', param).then(result => {
-      if (result.resultMsg === 'logIn_success') {
-        alert('로그인 완료!')
-        return navigate('/Main')
-      }
+    const logInResult = doReqPost('http://localhost:3001/logIn', param).then(result => {
 
       if (result.resultMsg === 'notFoundID') {
-        return alert('일치하는 ID가 없습니다.')
+        return '일치하는 ID가 없습니다.'
       }
 
-      if (result.resultMsg === 'notFoundPw')
-        alert('비밀번호를 다시 입력해주세요.')
+      if (result.resultMsg === 'notFoundPw'){
+        return '비밀번호를 다시 입력해주세요.'
+      }
 
+      if (result.resultMsg === 'logIn_success') {
+        navigate('/Main')
+        return ''
+      }
+        
       if (result.resultMsg === 'internal error') {
-        alert('에러가 발생하였습니다')
         console.log('Error---->', result.errorMsg)
+        return '에러가 발생하였습니다'
+        
       }
     })
+
+    console.log("이것만 하면된다--->", logInResult)
   }
 
   return (
@@ -57,15 +65,21 @@ export default function LogIn() {
 
           <div className={styles.inputWrap}>
             <p> ID</p>
-            <input type="text" onChange={e => setId(e.target.value)} />
+            <FaceOutlinedIcon className={styles.inputIcon} />
+            <input type="text" onChange={e => setId(e.target.value)} className={cx(styles.input, {[styles.inputBorderActive]: id}) } />
+            { invailidMsg.indexOf('ID') > -1 && <p className={styles.inputTextUnder}> {invailidMsg} </p> }
+            
           </div>
           <div className={styles.inputWrap}>
             <p> PW</p>
-            <input type="password" onChange={e => setPw(e.target.value)} />
+            <LockOutlinedIcon className={styles.inputIcon} />
+            <input type="password" onChange={e => setPw(e.target.value)} className={cx(styles.input, {[styles.inputBorderActive]: pw}) }  />
+            { invailidMsg.indexOf('비밀번호') > -1 && <p className={styles.inputTextUnder}> {invailidMsg} </p> }
+           
           </div>
 
           <button
-            className={cx(styles.applyBtn, { [styles.invalid]: invailidMsg })}
+            className={cx(styles.applyBtn, { [styles.applyBtnInvalid]: invailidMsg })}
             type="button"
             onClick={submitLogIn}>
             Log In
