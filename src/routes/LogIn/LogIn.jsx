@@ -1,5 +1,6 @@
 import cx from 'classnames'
 import styles from './LogIn.module.css'
+
 import { useMemo, useState } from 'react'
 import { doReqPost } from '../../Util/Api'
 import { useNavigate } from 'react-router'
@@ -7,11 +8,11 @@ import { useNavigate } from 'react-router'
 import FaceOutlinedIcon from '@mui/icons-material/FaceOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 
-
 export default function LogIn() {
   const navigate = useNavigate()
   const [id, setId] = useState('')
   const [pw, setPw] = useState('')
+  
 
   const invailidMsg = useMemo(() => {
     let obj = {
@@ -44,6 +45,7 @@ export default function LogIn() {
 
   return (
     <div className={styles.bobyContainer}>
+      <button className={styles.registerBtn} onClick={()=>{ navigate('/register') }}>Sign up</button>
       <div className={styles.card}>
         <div className={styles.cardContainer}>
           <p>Sign in</p>

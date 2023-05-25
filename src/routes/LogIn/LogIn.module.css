@@ -11,10 +11,6 @@ input {
 .inputBorderActive {
   border-bottom: 2px solid #3058C0;
 }
-.inputTextAbove {
-  color: #535353;
-  font-size: 12px;
-}
 .inputTextUnder {
   color: red !important;
   font-size: 11px !important;
@@ -49,6 +45,17 @@ input {
   pointer-events: none;
   background-color: #e8e9eb;
   color: #a7a7a7;
+}
+.registerBtn {
+  background-color: #3058C0;
+  color: white;
+  width: 100px;
+  height: 3.5rem;
+  position: absolute;
+  top: 2.5em;
+  right: 10em;
+  font-size: 1.7rem;
+  font-weight: 500;
 }
 .card {
   width: 55vh;

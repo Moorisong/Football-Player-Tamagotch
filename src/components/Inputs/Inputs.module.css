@@ -1,0 +1,10 @@
+.input_standard {
+  width: 90%;
+  height: 3.5rem;
+  display: block;
+  background-color: #fcfcfc;
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  padding: 0 0 0 3rem;
+  border-bottom: 1px solid #eeeeee;
+}
