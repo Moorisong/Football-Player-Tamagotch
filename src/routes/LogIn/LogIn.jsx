@@ -12,7 +12,7 @@ export default function LogIn() {
   const navigate = useNavigate()
   const [id, setId] = useState('')
   const [pw, setPw] = useState('')
-  
+
 
   const invailidMsg = useMemo(() => {
     let obj = {
@@ -44,7 +44,7 @@ export default function LogIn() {
   }
 
   return (
-    <div className={styles.bobyContainer}>
+    <div className={styles.bodyContainer}>
       <button className={styles.registerBtn} onClick={()=>{ navigate('/register') }}>Sign up</button>
       <div className={styles.card}>
         <div className={styles.cardContainer}>
