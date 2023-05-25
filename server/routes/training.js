@@ -138,7 +138,7 @@ router.post('/training', async (req, res) => {
     }
   } catch (err) {
     console.log('err----> ', err)
-    res.status(500).json({ resultMsg: 'internal error' })
+    res.status(500).json({ errorCode: 'internal error' })
   }
 })
 

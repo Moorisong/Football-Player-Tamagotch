@@ -298,7 +298,7 @@ router.post('/makeNewPlayer', async (req, res) => {
     res.status(200).json({ resultMsg: 'succees' })
   } catch (err) {
     if (err) console.log('err--->', err)
-    return res.status(500).json({ resultMsg: 'internal error' })
+    return res.status(500).json({ errorCode: 'internal error' })
   }
 })
 

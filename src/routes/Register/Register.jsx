@@ -104,7 +104,7 @@ export default function Register() {
           return false
         } else {
           alert('에러가 발생하였습니다')
-          console.log('Error---->', result.errorMsg)
+          console.log('Error---->', result.errorCode)
         }
       })
     }

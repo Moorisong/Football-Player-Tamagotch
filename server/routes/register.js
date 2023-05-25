@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
 
   } catch (e) {
     console.log('err---> ', e)
-    return res.status(500).json({resultMsg: 'internal error'})
+    return res.status(500).json({errorCode: 'internal error'})
   }
 })
 
