@@ -1,10 +1,54 @@
+input {
+  width: 90%;
+  height: 3.5rem;
+  display: block;
+  background-color: #fcfcfc;
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  padding: 0 0 0 3rem;
+  border-bottom: 1px solid #eeeeee;
+}
+.inputBorderActive {
+  border-bottom: 2px solid #3058C0;
+}
+.inputTextAbove {
+  color: #535353;
+  font-size: 12px;
+}
+.inputTextUnder {
+  color: red !important;
+  font-size: 11px !important;
+}
 .inputWrap {
   padding: 1rem 0 1rem 3rem;
 }
+.inputWrap > p {
+  font-size: 13px;
+  color: #535353;
+  position: relative;
+  left: 4.5px;
+  top: 1rem;
+}
 .inputIcon {
   position: relative;
-  top: 3rem;
-  left: 0.6rem;
+  top: 2.8rem;
+  left: 0.8rem;
+}
+.applyBtn {
+  background-color: #3058C0;
+  color: white;
+  width: 84%;
+  height: 3.5rem;
+  position: relative;
+  top: 4.5rem;
+  left: 3rem;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+.applyBtnInvalid {
+  pointer-events: none;
+  background-color: #e8e9eb;
+  color: #a7a7a7;
 }
 .card {
   width: 55vh;

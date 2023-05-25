@@ -15,7 +15,7 @@ router.post('/auth', (req, res) =>{
 
     jwt.verify(token, 'secret-by-ksh', (err, decoded) => {
       if(err){
-        return res.status(500).json({resultMsg: '토큰 복호화 과정에서 에러가 발생했습니다.'})
+        return res.status(500).json({errorMsg: '토큰 복호화 과정에서 에러가 발생했습니다.'})
       }
       User.findOne({id: decoded.userId}, (err, user)=>{
         if(err){
@@ -39,7 +39,7 @@ router.post('/auth', (req, res) =>{
     })
   }catch(err){
     if(err) console.log(err)
-    return res.status(500).json({resultMsg: 'internal error'})
+    return res.status(500).json({errorCode: 'internal error'})
   }
 
 })

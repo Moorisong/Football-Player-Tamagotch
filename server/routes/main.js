@@ -17,7 +17,7 @@ router.post('/main', async (req, res) => {
     const user = await User.findOne({ id: req.body.id }).exec()
 
     if(!user.playerInfo.hasPlayer){
-      return res.status(500).json({ resultMsg: 'noPlayer' })
+      return res.status(500).json({ errorCode: 'noPlayer' })
 
     }
     const playerName = user.playerInfo.playerName
@@ -68,7 +68,7 @@ router.post('/main', async (req, res) => {
     return res.status(200).json({ result: 'success', rs})
   } catch (err) {
     if (err) console.log('err---> ', err)
-    return res.status(500).json({ resultMsg: 'internal error' })
+    return res.status(500).json({ errorCode: 'internal error' })
   }
 })
 

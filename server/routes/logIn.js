@@ -43,7 +43,7 @@ router.post('/logIn', (req, res) => {
     })
   } catch {
     console.log('err---> ', err)
-    return res.status(500).json({ resultMsg: 'internal error' })
+    return res.status(500).json({ errorCode: 'internal error' })
   }
 })
 

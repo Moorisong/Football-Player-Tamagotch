@@ -7,7 +7,7 @@ router.post('/logOut', (req, res) => {
     return res.status(200).json({resultMsg: "logOut_success"})
   }catch(err){
     console.log("err---> ", err);
-    return res.status(500).json({resultMsg: 'internal error'})
+    return res.status(500).json({errorCode: 'internal error'})
     }
   })
 

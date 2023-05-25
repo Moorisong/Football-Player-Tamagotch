@@ -76,7 +76,7 @@ router.post('/giveKiss', async (req, res) => {
     }
   } catch (err) {
     if (err) console.log('err---->', err)
-    return res.status(500).json({ resultMsg: 'internal error' })
+    return res.status(500).json({ errorCode: 'internal error' })
   }
 })
 module.exports = router
