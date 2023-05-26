@@ -6,38 +6,33 @@ import cx from 'classnames'
 
 export default function Register() {
   const [idAdded, setIdAdded] = useState(false)
+  const [genderClicked, setGenderClicked] = useState('')
   const nav = useNavigate()
 
-  const [inputInfo, setInputInfo] = useState([
+  const [formData, setFormData] = useState([
     {
       name: 'id',
       value: '',
-      inputName: 'ID'
     },
     {
       name: 'pw',
       value: '',
-      inputName: 'PW'
     },
     {
       name: 'age',
       value: '',
-      inputName: 'Age'
     },
     {
-      name: 'sex',
+      name: 'gender',
       value: '',
-      inputName: 'Gender'
     },
     {
       name: 'nickName',
       value: '',
-      inputName: 'Nickname'
     },
     {
       name: 'club',
       value: '',
-      inputName: 'Club'
     },
   ])
 
@@ -46,23 +41,19 @@ export default function Register() {
       id: '',
       pw: '',
       age: '',
-      sex: '',
+      gender: '',
       nick: '',
       club: '',
-      invalid: true
+      invalid: true,
     }
-    let check = /^[0-9]+$/
-    const emptyIdx = inputInfo.findIndex((e) => e.value === '')
+    const emptyIdx = formData.findIndex((e) => e.value === '')
+    const ageRexStr = /^\d{8}$/;
 
-    if (emptyIdx > -1) obj[inputInfo[emptyIdx].name] = '모든 항목을 입력해주세요.'
+    if (emptyIdx > -1) obj[formData[emptyIdx].name] = '모든 항목을 입력해주세요.'
 
-    inputInfo.forEach((ele) => {
-      const val = ele.value
-      if (ele.name === 'id' && val.length > 20) obj.id = 'ID는 20글자까지 허용됩니다';
-      if (ele.name === 'pw' && val.length < 3) obj.pw = '패스워드는 3글자 이상으로 설정해주세요.';
-      if (ele.name === 'age' && !check.test(val)) obj.age = '나이는 숫자로 입력해주세요.';
-      if (ele.name === 'sex' && check.test(val)) obj.sex = '성별은 문자로 입력해주세요.';
-    })
+    if (formData[0].value > 20) obj.id = 'ID는 20글자까지 허용됩니다';
+    if (formData[1].value < 3) obj.pw = '패스워드는 3글자 이상으로 설정해주세요.';
+    if (!ageRexStr.test(formData[2].value)) obj.age = '8개로 이루어진 숫자를 입력해주세요.';
 
     for(const v of Object.values(obj)){
       if(v==='') obj.invalid = false
@@ -73,12 +64,12 @@ export default function Register() {
 
   function submitRegister() {
     const param = {
-      id: inputInfo[0].value,
-      pw: inputInfo[1].value,
-      age: inputInfo[2].value,
-      sex: inputInfo[3].value,
-      nickName: inputInfo[4].value,
-      club: inputInfo[5].value
+      id: formData[0].value,
+      pw: formData[1].value,
+      age: formData[2].value,
+      gender: formData[3].value,
+      nickName: formData[4].value,
+      club: formData[5].value
     }
 
     util.doReqPost('http://localhost:3001/register', param).then(result => {
@@ -98,30 +89,125 @@ export default function Register() {
 
       <div className={styles.card}>
         <div className={styles.cardContainer}>
-          <p>Sign up</p>
+          <p>회원가입</p>
           <div className={styles.inputWrap}>
 
-            {
-              !idAdded && inputInfo?.map((ele, idx) =>
-                <div key={idx} className={styles.inputWrap}>
-                  <p>{ele.inputName}</p>
-                  <input
-                    type='text'
-                    className={cx({[styles.inputBorderActive]: ele.value })}
-                    onChange={(e) => {
-                      let copy = [...inputInfo]
-                      copy[idx].value = e.target.value
-                      return setInputInfo(copy)
-                    }}
-                  />
-                  <p className={styles.inputTextUnder}>{invailidMsg[ele.name]}</p>
-                </div>
-              )
-            }
+          <div className={styles.inputWrap}>
+            <input
+              placeholder='아이디'
+              type='text'
+              className={cx(styles.registerInput, {[styles.inputBorderActive]: formData[0].value })}
+              onChange={(e) => {
+                let copy = [...formData]
+                copy[0].value = e.target.value
+                return setFormData(copy)
+              }}
+            />
+            <p className={styles.inputTextUnder}>{invailidMsg['id']}</p>
+          </div>
+
+          <div className={styles.inputWrap}>
+            <input
+              placeholder='비밀번호'
+              type='password'
+              className={cx(styles.registerInput, {[styles.inputBorderActive]: formData[1].value })}
+              onChange={(e) => {
+                let copy = [...formData]
+                copy[1].value = e.target.value
+                return setFormData(copy)
+              }}
+            />
+            <p className={styles.inputTextUnder}>{invailidMsg['pw']}</p>
+          </div>
+
+          <div className={styles.inputWrap}>
+            <input
+              placeholder='생년월일 8자리'
+              type='text'
+              className={cx(styles.registerInput, {[styles.inputBorderActive]: formData[2].value })}
+              onChange={(e) => {
+                let copy = [...formData]
+                copy[2].value = e.target.value
+                return setFormData(copy)
+              }}
+              onBlur={(e)=>{
+                const numToStr = e.target.value.toString() 
+                
+                let arr = numToStr.split('')
+                arr.splice(4,0,'.')
+                arr.splice(7,0,'.')
+                
+                const result = arr.join('')
+                
+                if(invailidMsg['age'] === '') e.target.value = result
+              }}
+            />
+            <p className={styles.inputTextUnder}>{invailidMsg['age']}</p>
+          </div>
+
+          <div className={styles.inputWrap}>
+              <ul>
+                <li>
+                  <input type="radio" id='gender1' value='m' onClick={(e)=>{
+                    setGenderClicked('m')
+                    let copy = [...formData]
+                    copy[3].value = e.target.value
+                    return setFormData(copy)
+                  }} />                  
+                  <label htmlFor='gender1' className={cx(styles.inputLabel, {[styles.labelClicked]: genderClicked === 'm' ? true : false })} ></label>
+                  <span>남자</span>
+                </li>
+                <li>
+                  <input type="radio" id='gender2' value='f' onClick={(e)=>{
+                    setGenderClicked('f')
+                    let copy = [...formData]
+                    copy[3].value = e.target.value
+                    return setFormData(copy)
+                  }} />
+                  <label htmlFor='gender2' className={cx(styles.inputLabel, {[styles.labelClicked]: genderClicked === 'f' ? true : false })} ></label>
+                  <span>여자</span>
+                </li>
+              </ul>
+
+              <div className={styles.selectWrap}>
+                <span>구단 선택</span>
+                <select name="favoriteClub" id="favoriteClub">
+                  <option value="barcelona">바르셀로나</option>
+                  <option value="manU">맨유</option>
+                </select>
+              </div>  
+          </div>
+
+          {/* <div className={styles.inputWrap}>
+            <span>구단 선택</span>
+            <select name="favoriteClub" id="favoriteClub">
+              <option value="barcelona">바르셀로나</option>
+              <option value="manU">맨유</option>
+            </select>
+            
+          </div>     */}
+
+          <div className={styles.inputWrap}>
+            <input
+              placeholder='닉네임'
+              type='text'
+              className={cx(styles.registerInput, {[styles.inputBorderActive]: formData[4].value })}
+              onChange={(e) => {
+                let copy = [...formData]
+                copy[4].value = e.target.value
+                return setFormData(copy)
+              }}
+            />
+            <p className={styles.inputTextUnder}>{invailidMsg['nick']}</p>
+          </div>  
+      
+
+
+           
           </div>
           {!idAdded && <button onClick={submitRegister} className={cx(styles.applyBtn, { [styles.applyBtnInvalid]: invailidMsg.invalid })} >
 
-            Sign up
+            가입하기
           </button>}
         </div>
       </div>

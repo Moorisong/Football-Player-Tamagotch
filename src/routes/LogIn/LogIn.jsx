@@ -53,14 +53,14 @@ export default function LogIn() {
           <div className={styles.inputWrap}>
             <p>ID</p>
             <FaceOutlinedIcon className={styles.inputIcon} />
-            <input type="text" onChange={e => setId(e.target.value)} className={cx(styles.input, { [styles.inputBorderActive]: id })} />
+            <input type="text" onChange={e => setId(e.target.value)} className={cx(styles.logInInput, { [styles.inputBorderActive]: id })} />
             {invailidMsg.id && <p className={styles.inputTextUnder}> {invailidMsg.id} </p>}
 
           </div>
           <div className={styles.inputWrap}>
             <p>PW</p>
             <LockOutlinedIcon className={styles.inputIcon} />
-            <input type="password" onChange={e => setPw(e.target.value)} className={cx(styles.input, { [styles.inputBorderActive]: pw })} />
+            <input type="password" onChange={e => setPw(e.target.value)} className={cx(styles.logInInput, { [styles.inputBorderActive]: pw })} />
             {invailidMsg.pw && <p className={styles.inputTextUnder}> {invailidMsg.pw} </p>}
 
           </div>

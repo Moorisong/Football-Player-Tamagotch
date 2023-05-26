@@ -1,11 +1,11 @@
-input {
+.registerInput {
   width: 90%;
   height: 3.5rem;
   display: inline-block;
   background-color: #fcfcfc;
   border: 1px solid #eeeeee;
   border-radius: 4px;
-  padding: 0 0 0 3rem;
+  padding: 0 0 0 1rem;
   border-bottom: 1px solid #eeeeee;
 }
 .inputBorderActive {
@@ -16,16 +16,41 @@ input {
   font-size: 11px !important;
   position: relative;
   top: 0.5rem;
+  left: 0.3rem;
 }
 .inputWrap {
   padding: 1rem 0 1rem 2rem;
+  margin-bottom: 0.5rem;
 }
-.inputWrap > p:first-child {
+.inputWrap > ul > li {
+  width: 4.5rem;
+  display: inline-block;
+  margin-right: 2rem;
+}
+.inputWrap > ul > li > input {
+  display: none;
+}
+.inputLabel {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fcfcfc;
+}
+.inputWrap > ul > li > span {
   font-size: 13px;
-  color: #535353;
   position: relative;
-  left: 4.5px;
-  top: -0.5rem;
+  top: -0.2rem;
+  left: 0.5rem;
+}
+.selectWrap > span {
+  font-size: 13px;
+  margin-right: 1rem;
+}
+.labelClicked{
+  background-color: #3058C0;
 }
 .applyBtn {
   background-color: #3058C0;
@@ -76,7 +101,7 @@ input {
   height: 75%;
 }
 .cardContainer > p {
-  width: 11rem;
+  width: 12rem;
   color: #535353;
   font-size: 3rem;
   font-weight: bold;
