@@ -9,13 +9,13 @@
   border-bottom: 1px solid #eeeeee;
 }
 .inputBorderActive {
-  border-bottom: 2px solid #3058C0;
+  border-bottom: 2px solid #3058c0;
 }
 .inputTextUnder {
   color: red !important;
   font-size: 11px !important;
   position: relative;
-  top: 0.5rem;
+  top: 0.7rem;
   left: 0.3rem;
 }
 .inputWrap {
@@ -25,7 +25,7 @@
 .inputWrap > ul > li {
   width: 4.5rem;
   display: inline-block;
-  margin-right: 2rem;
+  margin-right: 1rem;
 }
 .inputWrap > ul > li > input {
   display: none;
@@ -39,26 +39,43 @@
   cursor: pointer;
   background-color: #fcfcfc;
 }
+.inputWrap > ul {
+  display: inline-block;
+  position: relative;
+  top: 0.3rem;
+}
 .inputWrap > ul > li > span {
   font-size: 13px;
   position: relative;
   top: -0.2rem;
   left: 0.5rem;
 }
-.selectWrap > span {
+.selectWrap {
+  display: inline-block;
+  position: relative;
+  left: 2.7rem;
+}
+.marginTop {
+  margin-top: 0.7rem;
+}
+.selectWrap > span,
+.inputWrap > span {
   font-size: 13px;
   margin-right: 1rem;
 }
-.labelClicked{
-  background-color: #3058C0;
+.clubSelect {
+  display: inline-block;
+}
+.labelClicked {
+  background-color: #3058c0;
 }
 .applyBtn {
-  background-color: #3058C0;
+  background-color: #3058c0;
   color: white;
   width: 84%;
   height: 3.5rem;
   position: relative;
-  top: 4.5rem;
+  top: 3.5rem;
   left: 3rem;
   font-size: 1.7rem;
   font-weight: 500;
@@ -69,7 +86,7 @@
   color: #a7a7a7;
 }
 .cancelBtn {
-  background-color: #3058C0;
+  background-color: #3058c0;
   color: white;
   width: 100px;
   height: 3.5rem;
@@ -81,7 +98,7 @@
 }
 .card {
   width: 55vh;
-  height: 780px;
+  height: 70rem;
   background-color: #fff;
   box-shadow: 2px 2px 4px rgba(172, 172, 172, 0.1);
   display: flex;

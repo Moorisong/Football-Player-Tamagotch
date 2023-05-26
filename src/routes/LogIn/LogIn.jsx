@@ -45,20 +45,20 @@ export default function LogIn() {
 
   return (
     <div className={styles.bodyContainer}>
-      <button className={styles.registerBtn} onClick={()=>{ navigate('/register') }}>Sign up</button>
+      <button className={styles.registerBtn} onClick={()=>{ navigate('/register') }}>가입하기</button>
       <div className={styles.card}>
         <div className={styles.cardContainer}>
-          <p>Sign in</p>
+          <p>로그인</p>
 
           <div className={styles.inputWrap}>
-            <p>ID</p>
+            <p>아이디</p>
             <FaceOutlinedIcon className={styles.inputIcon} />
             <input type="text" onChange={e => setId(e.target.value)} className={cx(styles.logInInput, { [styles.inputBorderActive]: id })} />
             {invailidMsg.id && <p className={styles.inputTextUnder}> {invailidMsg.id} </p>}
 
           </div>
           <div className={styles.inputWrap}>
-            <p>PW</p>
+            <p>비밀번호</p>
             <LockOutlinedIcon className={styles.inputIcon} />
             <input type="password" onChange={e => setPw(e.target.value)} className={cx(styles.logInInput, { [styles.inputBorderActive]: pw })} />
             {invailidMsg.pw && <p className={styles.inputTextUnder}> {invailidMsg.pw} </p>}
@@ -69,7 +69,7 @@ export default function LogIn() {
             className={cx(styles.applyBtn, { [styles.applyBtnInvalid]: invailidMsg })}
             type="button"
             onClick={submitLogIn}>
-            Sign in
+            로그인 하기
           </button>
         </div>
       </div>
