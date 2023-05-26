@@ -63,15 +63,21 @@ export default function Register() {
     if (formData[6].value.length > 2 && formData[6].value !== formData[1].value)
       obj.pw_2 = '입력한 비밀번호와 일치하지 않습니다.'
     if (!ageRexStr.test(formData[2].value))
-      obj.age = '8개로 이루어진 숫자를 입력해주세요.'
-    for (const v of Object.values(obj)) {
-      if (v === '') obj.invalid = false
-    }
-    //ksh---- 어플라이 버튼 똑바로 동작 안함
+      obj.age = '생년월일을 숫자 8자로 입력해주세요.'
+    let num = 0
+
+    Object.values(obj).forEach((e, i) => {
+      if (!e) num += 1
+    })
+    if (num === 7) obj.invalid = false
     return obj
   })
 
   const clubInfo = [
+    {
+      name: '선택하기',
+      value: '',
+    },
     {
       name: 'FC 바르셀로나',
       value: 'FC Barcelona',
@@ -300,7 +306,9 @@ export default function Register() {
             <div className={styles.selectWrap}>
               <span>구단 선택 |</span>
               <select
-                className={styles.clubSelect}
+                className={cx(styles.clubSelect, {
+                  [styles.noneSelected]: !formData[5].value,
+                })}
                 name="favoriteClub"
                 id="favoriteClub"
                 onChange={e => {
