@@ -22,6 +22,11 @@
   padding: 1rem 0 1rem 2rem;
   margin-bottom: 0.5rem;
 }
+.inputWrap > input[type='date'] {
+  color: #535353;
+  width: 37.5rem;
+  padding-right: 1rem;
+}
 .inputWrap > ul > li {
   width: 4.5rem;
   display: inline-block;
@@ -45,32 +50,42 @@
   top: 0.3rem;
 }
 .inputWrap > ul > li > span {
-  font-size: 13px;
+  font-size: 14px;
   position: relative;
   top: -0.2rem;
   left: 0.5rem;
 }
-.selectWrap {
-  display: inline-block;
+.genderWrap {
   position: relative;
+  top: 1rem;
+  color: #535353;
+}
+.genderWrap > ul {
+  position:relative;
   left: 5.5rem;
 }
-.marginTop {
-  margin-top: 0.7rem;
+.genderWrap > ul > :last-child {
+  margin: 0 0 0 6rem;
 }
-.selectWrap > span,
+.clubSelectWrap {
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  left: 2rem;
+  top: 2rem;
+}
+.clubSelectWrap > select {
+  width: 29rem;
+  padding-right: 2rem;
+  border-style: none;
+  text-align: center;
+}
+.clubSelectWrap > span,
 .inputWrap > span {
-  font-size: 13px;
+  font-size: 14px;
   margin-right: 1rem;
   position: relative;
   top: -1px;
-}
-.clubSelect {
-  display: inline-block;
-  border-style: none;
-}
-.noneSelected {
-  border: 1px solid rgb(251, 140, 140);
 }
 .labelClicked {
   background-color: #3058c0;
@@ -81,7 +96,7 @@
   width: 84%;
   height: 3.5rem;
   position: relative;
-  top: 3.5rem;
+  top: 7rem;
   left: 3rem;
   font-size: 1.7rem;
   font-weight: 500;
@@ -104,7 +119,7 @@
 }
 .card {
   width: 55vh;
-  height: 70rem;
+  height: 65rem;
   background-color: #fff;
   box-shadow: 2px 2px 4px rgba(172, 172, 172, 0.1);
   display: flex;
@@ -121,7 +136,7 @@
 }
 .cardContainer {
   width: 100%;
-  height: 75%;
+  height: 80%;
 }
 .cardContainer > p {
   width: 12rem;
@@ -129,4 +144,7 @@
   font-size: 3rem;
   font-weight: bold;
   margin: auto;
+  margin-bottom: 1rem;
+  position: relative;
+  top: -1rem;
 }
