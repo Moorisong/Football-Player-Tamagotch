@@ -41,6 +41,7 @@ export default function Register() {
   ])
 
   const invailidMsg = useMemo(() => {
+    //ksh
     let obj = {
       id: '',
       pw: '',
@@ -54,79 +55,23 @@ export default function Register() {
     const emptyIdx = formData.findIndex(e => e.value === '')
     const ageRexStr = /^\d{8}$/
 
-    if (emptyIdx > -1)
-      obj[formData[emptyIdx].name] = '모든 항목을 입력해주세요.'
+    // if (emptyIdx > -1)
+    //   obj[formData[emptyIdx].name] = '모든 항목을 입력해주세요.'
 
-    if (formData[0].value > 20) obj.id = 'ID는 20글자까지 허용됩니다'
-    if (formData[1].value.length < 3)
-      obj.pw = '비밀번호는 3글자 이상으로 설정해주세요.'
-    if (formData[6].value.length > 2 && formData[6].value !== formData[1].value)
-      obj.pw_2 = '입력한 비밀번호와 일치하지 않습니다.'
-    if (!ageRexStr.test(formData[2].value))
-      obj.age = '생년월일을 숫자 8자로 입력해주세요.'
+    // if (formData[0].value > 20) obj.id = 'ID는 20글자까지 허용됩니다'
+    // if (formData[1].value.length < 3)
+    //   obj.pw = '비밀번호는 3글자 이상으로 설정해주세요.'
+    // if (formData[6].value.length > 2 && formData[6].value !== formData[1].value)
+    //   obj.pw_2 = '입력한 비밀번호와 일치하지 않습니다.'
+    // if (!ageRexStr.test(formData[2].value)) obj.age = '생년월일을 선택해주세요.'
     let num = 0
 
-    Object.values(obj).forEach((e, i) => {
+    Object.values(obj).forEach((e) => {
       if (!e) num += 1
     })
     if (num === 7) obj.invalid = false
     return obj
   })
-
-  const clubInfo = [
-    {
-      name: '선택하기',
-      value: '',
-    },
-    {
-      name: 'FC 바르셀로나',
-      value: 'FC Barcelona',
-    },
-    {
-      name: '레알 마드리드',
-      value: 'Real Madrid',
-    },
-    {
-      name: '세비야 FC',
-      value: 'Sevilla FC',
-    },
-    {
-      name: '발렌시아',
-      value: 'Valencia CF',
-    },
-    {
-      name: '맨유',
-      value: 'Manchester United',
-    },
-    {
-      name: '맨시티',
-      value: 'Manchester City',
-    },
-    {
-      name: '첼시',
-      value: 'Chelsea FC',
-    },
-    {
-      name: '아스날',
-      value: 'Arsenal FC',
-    },
-    {
-      name: '바이에른 뮌헨',
-      value: 'Bayern Munchen',
-    },
-    {
-      name: '인터 밀란',
-      value: 'Inter Milan',
-    },
-    {
-      name: '유벤투스',
-      value: 'Juventus',
-    },
-    {
-      name: 'AC 밀란',
-      value: 'AC Milan',
-    },
-  ]
 
   function submitRegister() {
     const param = {
@@ -142,7 +87,7 @@ export default function Register() {
       if (result.resultMsg === 'success') {
         setIdAdded(true)
         alert('회원 가입 완료! 로그인 해주시기 바랍니다.')
-        return nav('/LogIn')
+        return nav('/logIn')
       }
       if (result.resultMsg === 'duplicated ID')
         return alert('이미 존재하는 ID입니다.')
@@ -155,9 +100,8 @@ export default function Register() {
     <div className={styles.bodyContainer}>
       <button
         className={styles.cancelBtn}
-        onClick={() => {
-          nav('/login')
-        }}>
+        onClick={() => nav('/login')
+        }>
         로그인 하기
       </button>
 
@@ -178,7 +122,7 @@ export default function Register() {
                   return setFormData(copy)
                 }}
               />
-              <p className={styles.inputTextUnder}>{invailidMsg['id']}</p>
+              <p className={styles.inputTextUnder}>{invailidMsg.id}</p>
             </div>
 
             <div className={styles.inputWrap}>
@@ -215,33 +159,6 @@ export default function Register() {
 
             <div className={styles.inputWrap}>
               <input
-                placeholder="생년월일 8자리"
-                type="text"
-                className={cx(styles.registerInput, {
-                  [styles.inputBorderActive]: formData[2].value,
-                })}
-                onChange={e => {
-                  let copy = [...formData]
-                  copy[2].value = e.target.value
-                  return setFormData(copy)
-                }}
-                onBlur={e => {
-                  const numToStr = e.target.value.toString()
-
-                  let arr = numToStr.split('')
-                  arr.splice(4, 0, '.')
-                  arr.splice(7, 0, '.')
-
-                  const result = arr.join('')
-
-                  if (invailidMsg['age'] === '') e.target.value = result
-                }}
-              />
-              <p className={styles.inputTextUnder}>{invailidMsg['age']}</p>
-            </div>
-
-            <div className={styles.inputWrap}>
-              <input
                 placeholder="닉네임"
                 type="text"
                 className={cx(styles.registerInput, {
@@ -256,9 +173,24 @@ export default function Register() {
             </div>
 
             <div
-              className={`${styles.inputWrap} ${styles.marginTop}`}
-              style={{ display: 'inline-block' }}>
-              <span>성별 선택 |</span>
+              className={styles.inputWrap}>
+              <input
+                type="date"
+                className={cx(styles.registerInput, {
+                  [styles.inputBorderActive]: formData[2].value,
+                })}
+                onChange={e => {
+                  let copy = [...formData]
+                  copy[2].value = e.target.value
+                  return setFormData(copy)
+                }}
+              />
+              <p className={styles.inputTextUnder}>{invailidMsg['age']}</p>
+            </div>
+
+            <div className={`${styles.inputWrap} ${styles.genderWrap}`}>
+              <span>성별 선택 </span>
+              <span>|</span>
               <ul>
                 <li>
                   <input
@@ -276,7 +208,7 @@ export default function Register() {
                     htmlFor="gender1"
                     className={cx(styles.inputLabel, {
                       [styles.labelClicked]:
-                        genderClicked === 'm' ? true : false,
+                        genderClicked === 'm'
                     })}></label>
                   <span>남자</span>
                 </li>
@@ -303,10 +235,11 @@ export default function Register() {
               </ul>
             </div>
 
-            <div className={styles.selectWrap}>
-              <span>구단 선택 |</span>
+            <div className={styles.clubSelectWrap}>
+              <span>구단 선택</span>
+              <span>|</span>
               <select
-                className={cx(styles.clubSelect, {
+                className={cx(styles.selectWrap, {
                   [styles.noneSelected]: !formData[5].value,
                 })}
                 name="favoriteClub"
@@ -316,13 +249,12 @@ export default function Register() {
                   copy[5].value = e.target.value
                   return setFormData(copy)
                 }}>
-                {clubInfo.map((c, i) => {
-                  return (
-                    <option value={c.value} key={i}>
-                      {c.name}
-                    </option>
-                  )
-                })}
+                {clubInfo.map((c, i) =>
+                  <option value={c.value} key={i}>
+                    {c.name}
+                  </option>
+
+                )}
               </select>
             </div>
           </div>
@@ -340,3 +272,58 @@ export default function Register() {
     </div>
   )
 }
+
+const clubInfo = [
+  {
+    name: '선택하기',
+    value: '',
+  },
+  {
+    name: 'FC 바르셀로나',
+    value: 'FC Barcelona',
+  },
+  {
+    name: '레알 마드리드',
+    value: 'Real Madrid',
+  },
+  {
+    name: '세비야 FC',
+    value: 'Sevilla FC',
+  },
+  {
+    name: '발렌시아',
+    value: 'Valencia CF',
+  },
+  {
+    name: '맨체스터 유나이티드',
+    value: 'Manchester United',
+  },
+  {
+    name: '맨체스터 시티',
+    value: 'Manchester City',
+  },
+  {
+    name: '첼시',
+    value: 'Chelsea FC',
+  },
+  {
+    name: '아스날',
+    value: 'Arsenal FC',
+  },
+  {
+    name: '바이에른 뮌헨',
+    value: 'Bayern Munchen',
+  },
+  {
+    name: '인터 밀란',
+    value: 'Inter Milan',
+  },
+  {
+    name: '유벤투스',
+    value: 'Juventus',
+  },
+  {
+    name: 'AC 밀란',
+    value: 'AC Milan',
+  },
+]

@@ -36,16 +36,13 @@ export default function LogIn() {
     doReqPost('http://localhost:3001/logIn', param).then(result => {
       if (result.resultMsg === 'notFoundID' || result.resultMsg === 'notFoundPw') return alert('ID나 비밀번호가 올바르지 않습니다.')
       if (result.resultMsg === 'logIn_success') return navigate('/main')
-      if (result.errorCode === 'internal error') {
-        alert('에러가 발생하였습니다')
-        return console.log('Error--> ', result.errorCode)
-      }
+      if (result.errorCode === 'internal error') alert('에러가 발생하였습니다')
     })
   }
 
   return (
     <div className={styles.bodyContainer}>
-      <button className={styles.registerBtn} onClick={()=>{ navigate('/register') }}>가입하기</button>
+      <button className={styles.registerBtn} onClick={() => navigate('/register')}>가입하기</button>
       <div className={styles.card}>
         <div className={styles.cardContainer}>
           <p>로그인</p>
