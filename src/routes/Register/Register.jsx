@@ -2,47 +2,47 @@ import styles from './Register.module.css'
 import { useMemo, useState } from 'react'
 import * as util from '../../Util/Api'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
 export default function Register() {
   const nav = useNavigate()
 
   const [idAdded, setIdAdded] = useState(false)
-  const [genderClicked, setGenderClicked] = useState('')
-  const [formData, setFormData] = useState([
-    {
+  const [formData, setFormData] = useState({
+    id: {
       name: 'id',
       value: '',
     },
-    {
+
+    pw: {
       name: 'pw',
       value: '',
     },
-    {
-      name: 'age',
-      value: '',
-    },
-    {
-      name: 'gender',
-      value: '',
-    },
-    {
-      name: 'nickName',
-      value: '',
-    },
-    {
-      name: 'club',
-      value: '',
-    },
-    {
+    pw_2: {
       name: 'pw_2',
       value: '',
     },
-  ])
+    age: {
+      name: 'age',
+      value: '',
+    },
+    gender: {
+      name: 'gender',
+      value: '',
+    },
+    nickName: {
+      name: 'nickName',
+      value: '',
+    },
+    club: {
+      name: 'club',
+      value: '',
+    },
+  })
 
-  console.log('dd--> ', formData)
+  console.log('formData---> ', formData)
   const invailidMsg = useMemo(() => {
-    //ksh
     let obj = {
       id: '',
       pw: '',
@@ -53,8 +53,8 @@ export default function Register() {
       club: '',
       invalid: true,
     }
-    const emptyIdx = formData.findIndex(e => e.value === '')
-    const ageRexStr = /^\d{8}$/
+    // const emptyIdx = formData.findIndex(e => e.value === '')
+    // const ageRexStr = /^\d{8}$/
 
     // if (emptyIdx > -1)
     //   obj[formData[emptyIdx].name] = '모든 항목을 입력해주세요.'
@@ -67,7 +67,7 @@ export default function Register() {
     // if (!ageRexStr.test(formData[2].value)) obj.age = '생년월일을 선택해주세요.'
     let num = 0
 
-    Object.values(obj).forEach((e) => {
+    Object.values(obj).forEach(e => {
       if (!e) num += 1
     })
     if (num === 7) obj.invalid = false
@@ -76,12 +76,12 @@ export default function Register() {
 
   function submitRegister() {
     const param = {
-      id: formData[0].value,
-      pw: formData[1].value,
-      age: formData[2].value,
-      sex: formData[3].value,
-      nickName: formData[4].value,
-      club: formData[5].value,
+      id: formData.id.value,
+      pw: formData.pw.value,
+      age: formData.age.value,
+      sex: formData.gender.value,
+      nickName: formData.nickName.value,
+      club: formData.club.value,
     }
 
     util.doReqPost('http://localhost:3001/register', param).then(result => {
@@ -99,12 +99,9 @@ export default function Register() {
 
   return (
     <div className={styles.bodyContainer}>
-      <button
-        className={styles.cancelBtn}
-        onClick={() => nav('/login')
-        }>
+      <Link className={styles.cancelBtn} to="/login">
         로그인 하기
-      </button>
+      </Link>
 
       <div className={styles.card}>
         <div className={styles.cardContainer}>
@@ -115,12 +112,17 @@ export default function Register() {
                 placeholder="아이디"
                 type="text"
                 className={cx(styles.registerInput, {
-                  [styles.inputBorderActive]: formData[0].value,
+                  [styles.inputBorderActive]: formData.id.value,
                 })}
                 onChange={e => {
-                  let copy = [...formData]
-                  copy[0].value = e.target.value
-                  return setFormData(copy)
+                  const targetVal = e.currentTarget.value
+                  setFormData(prev => ({
+                    ...prev,
+                    id: {
+                      ...prev.id,
+                      value: targetVal,
+                    },
+                  }))
                 }}
               />
               <p className={styles.inputTextUnder}>{invailidMsg.id}</p>
@@ -131,12 +133,17 @@ export default function Register() {
                 placeholder="비밀번호"
                 type="password"
                 className={cx(styles.registerInput, {
-                  [styles.inputBorderActive]: formData[1].value,
+                  [styles.inputBorderActive]: formData.pw.value,
                 })}
                 onChange={e => {
-                  let copy = [...formData]
-                  copy[1].value = e.target.value
-                  return setFormData(copy)
+                  const targetVal = e.currentTarget.value
+                  setFormData(prev => ({
+                    ...prev,
+                    pw: {
+                      ...prev.pw,
+                      value: targetVal,
+                    },
+                  }))
                 }}
               />
               <p className={styles.inputTextUnder}>{invailidMsg['pw']}</p>
@@ -147,12 +154,17 @@ export default function Register() {
                 placeholder="비밀번호 재입력"
                 type="password"
                 className={cx(styles.registerInput, {
-                  [styles.inputBorderActive]: formData[6].value,
+                  [styles.inputBorderActive]: formData.pw_2.value,
                 })}
                 onChange={e => {
-                  let copy = [...formData]
-                  copy[6].value = e.target.value
-                  return setFormData(copy)
+                  const targetVal = e.currentTarget.value
+                  setFormData(prev => ({
+                    ...prev,
+                    pw_2: {
+                      ...prev.pw_2,
+                      value: targetVal,
+                    },
+                  }))
                 }}
               />
               <p className={styles.inputTextUnder}>{invailidMsg['pw_2']}</p>
@@ -163,27 +175,36 @@ export default function Register() {
                 placeholder="닉네임"
                 type="text"
                 className={cx(styles.registerInput, {
-                  [styles.inputBorderActive]: formData[4].value,
+                  [styles.inputBorderActive]: formData.nickName.value,
                 })}
                 onChange={e => {
-                  let copy = [...formData]
-                  copy[4].value = e.target.value
-                  return setFormData(copy)
+                  const targetVal = e.currentTarget.value
+                  setFormData(prev => ({
+                    ...prev,
+                    nickName: {
+                      ...prev.nickName,
+                      value: targetVal,
+                    },
+                  }))
                 }}
               />
             </div>
 
-            <div
-              className={styles.inputWrap}>
+            <div className={styles.inputWrap}>
               <input
                 type="date"
                 className={cx(styles.registerInput, {
-                  [styles.inputBorderActive]: formData[2].value,
+                  [styles.inputBorderActive]: formData.age.value,
                 })}
                 onChange={e => {
-                  let copy = [...formData]
-                  copy[2].value = e.target.value
-                  return setFormData(copy)
+                  const targetVal = e.currentTarget.value
+                  setFormData(prev => ({
+                    ...prev,
+                    age: {
+                      ...prev.age,
+                      value: targetVal,
+                    },
+                  }))
                 }}
               />
               <p className={styles.inputTextUnder}>{invailidMsg['age']}</p>
@@ -197,19 +218,23 @@ export default function Register() {
                   <input
                     type="radio"
                     id="gender1"
+                    name="m"
                     value="m"
                     onClick={e => {
-                      setGenderClicked('m')
-                      let copy = [...formData]
-                      copy[3].value = e.target.value
-                      return setFormData(copy)
+                      const targetVal = e.currentTarget.value
+                      setFormData(prev => ({
+                        ...prev,
+                        gender: {
+                          ...prev.gender,
+                          value: targetVal,
+                        },
+                      }))
                     }}
                   />
                   <label
                     htmlFor="gender1"
                     className={cx(styles.inputLabel, {
-                      [styles.labelClicked]:
-                        genderClicked === 'm'
+                      [styles.labelClicked]: formData.gender.value === 'm',
                     })}></label>
                   <span>남자</span>
                 </li>
@@ -217,19 +242,23 @@ export default function Register() {
                   <input
                     type="radio"
                     id="gender2"
+                    name="f"
                     value="f"
                     onClick={e => {
-                      setGenderClicked('f')
-                      let copy = [...formData]
-                      copy[3].value = e.target.value
-                      return setFormData(copy)
+                      const targetVal = e.currentTarget.value
+                      setFormData(prev => ({
+                        ...prev,
+                        gender: {
+                          ...prev.gender,
+                          value: targetVal,
+                        },
+                      }))
                     }}
                   />
                   <label
                     htmlFor="gender2"
                     className={cx(styles.inputLabel, {
-                      [styles.labelClicked]:
-                        genderClicked === 'f' ? true : false,
+                      [styles.labelClicked]: formData.gender.value === 'f',
                     })}></label>
                   <span>여자</span>
                 </li>
@@ -241,21 +270,25 @@ export default function Register() {
               <span>|</span>
               <select
                 className={cx(styles.selectWrap, {
-                  [styles.noneSelected]: !formData[5].value,
+                  [styles.noneSelected]: !formData.club.value,
                 })}
                 name="favoriteClub"
                 id="favoriteClub"
                 onChange={e => {
-                  let copy = [...formData]
-                  copy[5].value = e.target.value
-                  return setFormData(copy)
+                  const targetVal = e.currentTarget.value
+                  setFormData(prev => ({
+                    ...prev,
+                    club: {
+                      ...prev.club,
+                      value: targetVal,
+                    },
+                  }))
                 }}>
-                {clubInfo.map((c, i) =>
+                {clubInfo.map((c, i) => (
                   <option value={c.value} key={i}>
                     {c.name}
                   </option>
-
-                )}
+                ))}
               </select>
             </div>
           </div>
@@ -328,3 +361,8 @@ const clubInfo = [
     value: 'AC Milan',
   },
 ]
+
+const Gender = {
+  Male: 'm',
+  Female: 'f',
+}
