@@ -42,6 +42,7 @@ export default function Register() {
 
   console.log('dd--> ', formData)
   const invailidMsg = useMemo(() => {
+    //ksh
     let obj = {
       id: '',
       pw: '',
@@ -66,67 +67,12 @@ export default function Register() {
     // if (!ageRexStr.test(formData[2].value)) obj.age = '생년월일을 선택해주세요.'
     let num = 0
 
-    Object.values(obj).forEach((e, i) => {
+    Object.values(obj).forEach((e) => {
       if (!e) num += 1
     })
     if (num === 7) obj.invalid = false
     return obj
   })
-
-  const clubInfo = [
-    {
-      name: '선택하기',
-      value: '',
-    },
-    {
-      name: 'FC 바르셀로나',
-      value: 'FC Barcelona',
-    },
-    {
-      name: '레알 마드리드',
-      value: 'Real Madrid',
-    },
-    {
-      name: '세비야 FC',
-      value: 'Sevilla FC',
-    },
-    {
-      name: '발렌시아',
-      value: 'Valencia CF',
-    },
-    {
-      name: '맨체스터 유나이티드',
-      value: 'Manchester United',
-    },
-    {
-      name: '맨체스터 시티',
-      value: 'Manchester City',
-    },
-    {
-      name: '첼시',
-      value: 'Chelsea FC',
-    },
-    {
-      name: '아스날',
-      value: 'Arsenal FC',
-    },
-    {
-      name: '바이에른 뮌헨',
-      value: 'Bayern Munchen',
-    },
-    {
-      name: '인터 밀란',
-      value: 'Inter Milan',
-    },
-    {
-      name: '유벤투스',
-      value: 'Juventus',
-    },
-    {
-      name: 'AC 밀란',
-      value: 'AC Milan',
-    },
-  ]
 
   function submitRegister() {
     const param = {
@@ -155,9 +101,8 @@ export default function Register() {
     <div className={styles.bodyContainer}>
       <button
         className={styles.cancelBtn}
-        onClick={() => {
-          nav('/login')
-        }}>
+        onClick={() => nav('/login')
+        }>
         로그인 하기
       </button>
 
@@ -178,7 +123,7 @@ export default function Register() {
                   return setFormData(copy)
                 }}
               />
-              <p className={styles.inputTextUnder}>{invailidMsg['id']}</p>
+              <p className={styles.inputTextUnder}>{invailidMsg.id}</p>
             </div>
 
             <div className={styles.inputWrap}>
@@ -229,8 +174,7 @@ export default function Register() {
             </div>
 
             <div
-              className={styles.inputWrap}
-              style={{ display: 'inline-block' }}>
+              className={styles.inputWrap}>
               <input
                 type="date"
                 className={cx(styles.registerInput, {
@@ -265,7 +209,7 @@ export default function Register() {
                     htmlFor="gender1"
                     className={cx(styles.inputLabel, {
                       [styles.labelClicked]:
-                        genderClicked === 'm' ? true : false,
+                        genderClicked === 'm'
                     })}></label>
                   <span>남자</span>
                 </li>
@@ -306,13 +250,12 @@ export default function Register() {
                   copy[5].value = e.target.value
                   return setFormData(copy)
                 }}>
-                {clubInfo.map((c, i) => {
-                  return (
-                    <option value={c.value} key={i}>
-                      {c.name}
-                    </option>
-                  )
-                })}
+                {clubInfo.map((c, i) =>
+                  <option value={c.value} key={i}>
+                    {c.name}
+                  </option>
+
+                )}
               </select>
             </div>
           </div>
@@ -330,3 +273,58 @@ export default function Register() {
     </div>
   )
 }
+
+const clubInfo = [
+  {
+    name: '선택하기',
+    value: '',
+  },
+  {
+    name: 'FC 바르셀로나',
+    value: 'FC Barcelona',
+  },
+  {
+    name: '레알 마드리드',
+    value: 'Real Madrid',
+  },
+  {
+    name: '세비야 FC',
+    value: 'Sevilla FC',
+  },
+  {
+    name: '발렌시아',
+    value: 'Valencia CF',
+  },
+  {
+    name: '맨체스터 유나이티드',
+    value: 'Manchester United',
+  },
+  {
+    name: '맨체스터 시티',
+    value: 'Manchester City',
+  },
+  {
+    name: '첼시',
+    value: 'Chelsea FC',
+  },
+  {
+    name: '아스날',
+    value: 'Arsenal FC',
+  },
+  {
+    name: '바이에른 뮌헨',
+    value: 'Bayern Munchen',
+  },
+  {
+    name: '인터 밀란',
+    value: 'Inter Milan',
+  },
+  {
+    name: '유벤투스',
+    value: 'Juventus',
+  },
+  {
+    name: 'AC 밀란',
+    value: 'AC Milan',
+  },
+]
